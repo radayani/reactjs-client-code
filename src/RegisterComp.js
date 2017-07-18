@@ -114,7 +114,7 @@ export default class RegisterComp extends Component {
     }
     componentDidMount() {
 
-        fetch(`http://localhost:3002/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
+        fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
 
             headers: {
                 'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export default class RegisterComp extends Component {
 
     handleRegisterButton() {
         console.log("this");
-        fetch(`http://localhost:3002/api/projects/RegisterProjects`, {
+        fetch(`/api/projects/RegisterProjects`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

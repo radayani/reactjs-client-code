@@ -14,7 +14,8 @@ export default class Home extends React.Component {
         localStorage.setItem("alias", this.props.alias);
     }
     handleLoginButton() {
-        window.location.replace('http://local.skyfonts.com:3002/api/login');
+        // window.location.replace('http://local.skyfonts.com:3002/api/login');
+        window.location.replace('http://sfvotes.azurewebsites.net/api/login');
         
     }
 

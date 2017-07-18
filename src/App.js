@@ -108,7 +108,7 @@ class App extends Component {
                         </div>
                         <Switch>
                             <PropsRoute exact path='/' component={Home} auth={auth} />
-                            <PropsRoute exact path='/user/:alias/register' component={RegisterComp} props="hi"/>
+                            <PropsRoute path='/user/:alias/register' component={RegisterComp} props="hi"/>
 
                             {//  <Route exact path={`/loginPage`} component={LoginPage} />
                             }
