@@ -4,7 +4,7 @@ import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom"
 import Checkbox from 'material-ui/Checkbox';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { cyan100 } from 'material-ui/styles/colors';
+import { cyan100, redA700, green700, grey100 } from 'material-ui/styles/colors';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import GenerateMyPinComponent from './GenerateMyPinComponent';
 import UserModeComponent from './UserModeComponent';
@@ -23,28 +23,33 @@ import Paper from 'material-ui/Paper';
 import Home from './Home';
 import AutoComplete from 'material-ui/AutoComplete';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
 import Snackbar from 'material-ui/Snackbar';
 const styles = {
-    block: {
-        maxWidth: 310,
-    },
-    radioButton: {
-        marginTop: 15,
+    // block: {
+    //     maxWidth: 390,
+    // },
+    // radioButton: {
+    //     marginTop: 15,
 
-        textAlign: 'left'
-    },
+    //     textAlign: 'left'
+    // },
     margins: {
         width: 310,
         marginTop: 8,
-        padding: 5,
+        padding: 10,
         display: 'inline-block',
         marginBottom: 20,
 
     },
-    registerButton: {
-        backgroundColor: cyan100,
-        marginRight: 30,
+    customWidth: {
+        width: 300,
     },
+    // registerButton: {
+    //     backgroundColor: cyan100,
+    //     marginRight: 30,
+    // },
 };
 
 // const dataSource1 = [
@@ -79,7 +84,8 @@ export default class RegisterComp extends Component {
         super(props);
         this.state = {
             venueListOpen: false,
-            venueValue: 'nochoice',
+            venueValue: -1,
+            projectValue: -1,
             projects: [],
             venues: null,
             chosenProjs: null,
@@ -121,7 +127,8 @@ export default class RegisterComp extends Component {
                 'Accept': 'application/json',
 
             }
-        }).then(res => res.json())
+        })
+            .then(res => res.json())
             .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
 
 
@@ -144,9 +151,31 @@ export default class RegisterComp extends Component {
 
     // }
 
-    handleRegisterButton() {
-        console.log("this");
-        fetch(`/api/projects/RegisterProjects`, {
+  
+    componentDidUpdate() {
+        console.log("will update");
+    }
+    handleRequestClose = () => {
+        this.setState({
+            snackbarOpen: false,
+            projectValue:-1,
+            venueValue:-1,
+            registered: false
+        });
+    };
+
+    handleProjectSelection(event, index, value) {
+        console.log(event + " " + index + " " + value);
+        this.setState({ projectValue: value });
+    }
+    handleVenueSelection(event, index, value) {
+        console.log(event + " " + index + " " + value);
+        this.setState({ venueValue: value });
+
+    }
+    handleRegistrationButton() {
+        if(this.state.projectValue!=-1 && this.state.venueValue!=-1){
+              fetch(`/api/registerProject`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -155,8 +184,8 @@ export default class RegisterComp extends Component {
             },
             body: {
                 "alias": localStorage.alias,
-                "venue_id": this.state.venues,
-                "projects": this.state.chosenProjs
+                "venue_id": this.state.venueValue,
+                "projects": this.state.projectValue
             }
 
         })
@@ -175,103 +204,96 @@ export default class RegisterComp extends Component {
                         projs = data;
                         console.log(projs);
                     });
-            }).then(this.setState({ registered: true, snackbarOpen: true })).then(this.forceUpdate())
+            }).then(this.setState({ registered: true, snackbarOpen: true }))
+            // .then(this.forceUpdate())
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
             });
-
-
+            
+            
+           
+        }
+        
     }
-    componentDidUpdate() {
-        console.log("will update");
-    }
-    handleRequestClose = () => {
-        this.setState({
-            snackbarOpen: false,
-            // invalidProjectSelected: false,
-            registered: false
-        });
-    };
-
-
-    handleSearchUpdate(searchText, dataSource, params) {
-        console.log(searchText);
-
-        console.log(dataSource);
-        // this.setState({ searchedText: searchText, projects:this.state.projects });
-
-
-
-
-
-        // .then(function(res){
-        //   this.setState({projects: res.json().then(function(data){console.log(data)})});
-        // })
-        this.setState({ searchedText: searchText }, function () { console.log("searched updated to:" + this.state.searchedText) });
-
-
-    }
-    handleClose = () => {
-        this.setState({ venueListOpen: false });
-    };
-    handleRadioSelect(event, value) {
-        console.log(event + " " + value);
-        this.setState({ venues: value });
-    }
-    handleVenueForProj(x, y) {
-        console.log("x: " + x);
-        this.setState({ venueListOpen: true, selectedProjId: x, selectedProjTitle: y });
-    }
-    handleChange(event, index, value) {
-        this.setState({ venueValue:value });
-    }
-
     render() {
         console.log("render" + this.state.projects);
         return (
-            <div className="default">
-                {this.state.projects == undefined &&
-                    <FlatButton label="Show My Projects" onTouchTap={this.handleGetProjects.bind(this)} />
+            <div >
+                <Paper zDepth={1} style={styles.margins}>
+                    <h3 style={{ marginTop: 10, textAlign: 'center' }}><b>Resgistration</b></h3>
+
+                    <DropDownMenu
+                        style={styles.customWidth}
+                        value={this.state.projectValue}
+                        onChange={this.handleProjectSelection.bind(this)}
+                        autoWidth={true}
+                    >
+                        <MenuItem value={-1}  primaryText="Select Project to Register" />
+                        {this.state.projects.map(function (elem, i) {
+                            return (
+                                <MenuItem value={elem.id} primaryText={elem.name} key={i} />
+                            );
+                        }, this)}
+
+
+                    </DropDownMenu>
+
+                    <br />
+                    <br />
+
+                    <DropDownMenu
+                        style={styles.customWidth}
+                        value={this.state.venueValue}
+                        onChange={this.handleVenueSelection.bind(this)}
+                        autoWidth={true}
+                    >
+                        <MenuItem value={-1}  primaryText="Demo Booth Venue Preference" />
+                        <MenuItem value={101} primaryText="Hyderabad: MPR B1" />
+                        <MenuItem value={102} primaryText="Hyderabad: MPR B2" />
+                        <MenuItem value={103} primaryText="Hyderabad: B1B2 Lane LG" />
+                        <MenuItem value={104} primaryText="Hyderabad: MPR B3" />
+                        <MenuItem value={105} primaryText="Hyderabad: B3 Lobby" />
+
+                    </DropDownMenu>
+                    <br /><br /><br />
+                    <RaisedButton label="Register" onTouchTap={this.handleRegistrationButton.bind(this)} />
+                </Paper>
+                {this.state.projectValue == -1 && this.state.registered
+                    &&
+                    <Snackbar
+                        style={{ width: 300 }}
+                        open={this.state.snackbarOpen}
+                        message="Please Select a Project!"
+                        autoHideDuration={1000}
+                        bodyStyle={{ backgroundColor: redA700 }}
+
+                        onRequestClose={this.handleRequestClose.bind(this)} />
                 }
 
-                {
-                    this.state.projects.map(function (elem, i) {
-                        return (
+                {this.state.venueValue == -1 && this.state.registered
+                    &&
+                    <Snackbar
+                        style={{ width: 300 }}
+                        open={this.state.snackbarOpen}
+                        message="Please Provide Booth Venue Preference!"
+                        autoHideDuration={1000}
+                        bodyStyle={{ backgroundColor: redA700 }}
 
-                            <Card key={i}>
-                                <CardHeader
-
-                                    title={elem.name}
-
-                                    actAsExpander={false}
-                                    showExpandableButton={false}
-                                />
-
-                                <CardActions>
-                                    <DropDownMenu
-                                        key={i}
-                                        value={this.state.venueValue}
-                                        onChange={this.handleChange.bind(this)}
-                                        style={styles.customWidth}
-                                        autoWidth={true}
-                                    >
-                                    <MenuItem value={'nochoice'} primaryText="No Preference" />
-                                        <MenuItem value={'hydB1Mpr'} primaryText="Hyderabad: MPR B1" />
-                                        <MenuItem value={'hydB2Mpr'} primaryText="Hyderabad: MPR B2" />
-                                        <MenuItem value={'hydB1B2Aisle'} primaryText="Hyderabad: B1B2 Lane LG" />
-                                        <MenuItem value={'hydB3Mpr'} primaryText="Hyderabad: MPR B3" />
-                                        <MenuItem value={'hydB3lobby'} primaryText="Hyderabad: B3 Lobby" />
-
-                                    </DropDownMenu>
-
-                                </CardActions>
-
-                            </Card>
-
-                        );
-                    }, this)}
-
+                        onRequestClose={this.handleRequestClose.bind(this)} />
+                }
+                {this.state.projectValue != -1 && this.state.venueValue != -1 && this.state.registered
+                    &&
+                    <Snackbar
+                        style={{ width: 300 }}
+                        open={this.state.snackbarOpen}
+                        message="Registered Project Successfully!"
+                        autoHideDuration={1000}
+                        bodyStyle={{ backgroundColor: green700 }}
+                        
+                        onRequestClose={this.handleRequestClose.bind(this)} />
+                }
             </div>
+
 
 
         );
