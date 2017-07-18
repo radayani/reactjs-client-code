@@ -68,9 +68,8 @@ class App extends Component {
 
     componentDidMount() {
         console.log("component did mount");
-        this.setState({ alias: 'umkhande' });
+        // this.setState({ alias: 'umkhande' });
         //get api call 
-
 
 
     }
@@ -78,7 +77,7 @@ class App extends Component {
     componentWillMount() {
         // cookie.save('name', 'radayani', {path:'/'});
         console.log("component will mount" + localStorage.alias);
-        
+
 
     }
 
@@ -108,7 +107,7 @@ class App extends Component {
                         </div>
                         <Switch>
                             <PropsRoute exact path='/' component={Home} auth={auth} />
-                            <PropsRoute path='/user/:alias/register' component={RegisterComp} props="hi"/>
+                            <PropsRoute path='/user/:alias/register' component={RegisterComp} props="hi" />
 
                             {//  <Route exact path={`/loginPage`} component={LoginPage} />
                             }

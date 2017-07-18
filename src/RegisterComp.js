@@ -26,6 +26,10 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Snackbar from 'material-ui/Snackbar';
+
+const cookies = new Cookies();
+
+
 const styles = {
     // block: {
     //     maxWidth: 390,
@@ -52,24 +56,6 @@ const styles = {
     // },
 };
 
-// const dataSource1 = [
-//   {
-//     text: 'proj 1',
-//     value: (
-//       <Checkbox
-//       style={styles.checkbox}
-//     />
-//     ),
-//   },
-//   {
-//     text: 'proj 2',
-//     value: (
-//       <Checkbox
-//       style={styles.checkbox}
-//     />
-//     ),
-//   },
-// ];
 
 
 
@@ -80,7 +66,7 @@ const dataSourceConfig = {
 var projs = null;
 export default class RegisterComp extends Component {
     constructor(props) {
-        localStorage.setItem("alias", "umkhande");
+        localStorage.setItem("alias", cookies.get('alias'));
         super(props);
         this.state = {
             venueListOpen: false,
@@ -120,17 +106,6 @@ export default class RegisterComp extends Component {
     }
     componentDidMount() {
 
-        fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
-
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-
-            }
-        })
-            .then(res => res.json())
-            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
-
 
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions.bind(this));
@@ -150,18 +125,44 @@ export default class RegisterComp extends Component {
     //     .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
 
     // }
+    componentWillMount() {
+        fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
 
-  
-    componentDidUpdate() {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        })
+            .then(res => res.json())
+            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
+
+
+    }
+
+    componentWillUpdate() {
         console.log("will update");
     }
     handleRequestClose = () => {
         this.setState({
             snackbarOpen: false,
-            projectValue:-1,
-            venueValue:-1,
+            projectValue: -1,
+            venueValue: -1,
             registered: false
         });
+
+        fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        })
+            .then(res => res.json())
+            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
+
+
     };
 
     handleProjectSelection(event, index, value) {
@@ -174,46 +175,46 @@ export default class RegisterComp extends Component {
 
     }
     handleRegistrationButton() {
-        if(this.state.projectValue!=-1 && this.state.venueValue!=-1){
-              fetch(`/api/registerProject`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
+        if (this.state.projectValue != -1 && this.state.venueValue != -1) {
+            fetch(`http://localhost:3002/api/registerProject`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
 
-            },
-            body: {
-                "alias": localStorage.alias,
-                "venue_id": this.state.venueValue,
-                "projects": this.state.projectValue
-            }
+                },
+                body: JSON.stringify({
+                    'alias': localStorage.alias,
+                    'venue_id': this.state.venueValue,
+                    'projects': this.state.projectValue
+                })
 
-        })
-            .then(function (response) {
+            })
+                .then(function (response) {
 
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
+                    if (response.status !== 200) {
+                        console.log('Looks like there was a problem. Status Code: ' +
+                            response.status);
+                        return;
+                    }
 
-                // Examine the text in the response  
-                response.json()
-                    .then(function (data) {
-                        console.log(data);
-                        projs = data;
-                        console.log(projs);
-                    });
-            }).then(this.setState({ registered: true, snackbarOpen: true }))
-            // .then(this.forceUpdate())
-            .catch(function (err) {
-                console.log('Fetch Error :-S', err);
-            });
-            
-            
-           
+                    // Examine the text in the response  
+                    response.json()
+                        .then(function (data) {
+                            console.log(data);
+                            projs = data;
+                            console.log(projs);
+                        });
+                }).then(this.setState({ registered: true, snackbarOpen: true }))
+                // .then(this.forceUpdate())
+                .catch(function (err) {
+                    console.log('Fetch Error :-S', err);
+                });
+
+
+
         }
-        
+
     }
     render() {
         console.log("render" + this.state.projects);
@@ -228,7 +229,7 @@ export default class RegisterComp extends Component {
                         onChange={this.handleProjectSelection.bind(this)}
                         autoWidth={true}
                     >
-                        <MenuItem value={-1}  primaryText="Select Project to Register" />
+                        <MenuItem value={-1} primaryText="Select Project to Register" />
                         {this.state.projects.map(function (elem, i) {
                             return (
                                 <MenuItem value={elem.id} primaryText={elem.name} key={i} />
@@ -247,7 +248,7 @@ export default class RegisterComp extends Component {
                         onChange={this.handleVenueSelection.bind(this)}
                         autoWidth={true}
                     >
-                        <MenuItem value={-1}  primaryText="Demo Booth Venue Preference" />
+                        <MenuItem value={-1} primaryText="Demo Booth Venue Preference" />
                         <MenuItem value={101} primaryText="Hyderabad: MPR B1" />
                         <MenuItem value={102} primaryText="Hyderabad: MPR B2" />
                         <MenuItem value={103} primaryText="Hyderabad: B1B2 Lane LG" />
@@ -289,7 +290,7 @@ export default class RegisterComp extends Component {
                         message="Registered Project Successfully!"
                         autoHideDuration={1000}
                         bodyStyle={{ backgroundColor: green700 }}
-                        
+
                         onRequestClose={this.handleRequestClose.bind(this)} />
                 }
             </div>

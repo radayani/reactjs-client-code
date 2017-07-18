@@ -10,20 +10,26 @@ export default class Home extends React.Component {
     constructor(props) {
 
         super(props);
+
         localStorage.clear();
-        localStorage.setItem("alias", this.props.alias);
     }
     handleLoginButton() {
         // window.location.replace('http://local.skyfonts.com:3002/api/login');
-        window.location.replace('http://sfvotes.azurewebsites.net/api/login');
-        
-    }
 
-    render() {
-        return (
-            // <NavLink to={`/user/${this.props.alias}`} >
-            <RaisedButton label="Login" onTouchTap={this.handleLoginButton.bind(this)} />
-            // </NavLink>
-        );
+
     }
+    componentWillMount() {
+        // window.location.replace('http://localhost:3002/api/login');
+        window.location.replace('http://sfvotes.azurewebsites.net/api/login');
+
+
+    }
+    render() { return }
+    // render() {
+    //     return (
+    //         // <NavLink to={`/user/${this.props.alias}`} >
+    //         <RaisedButton label="Login" onTouchTap={this.handleLoginButton.bind(this)} />
+    //         // </NavLink>
+    //     );
+    // }
 }
