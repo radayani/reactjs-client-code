@@ -128,9 +128,9 @@ export default class MyRegisteredProjectsCards extends React.Component {
                   {elem.description}
                 </CardText>
                 <CardActions>
-                  {console.log(`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.project_id}/votePage?${this.state.deviceWindow}`)}
+                  {console.log(`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.project_id}/votePage?${this.state.deviceWindow}`)}
                   {this.state.deviceWindow === 'narrowWindow' &&
-                    <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.project_id}/votePage?${this.state.deviceWindow}`} >
+                    <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.project_id}/votePage?${this.state.deviceWindow}`} >
                       <FlatButton label="Take Vote" style={styles.presenterButton} projTitle={elem.title}/>
                     </NavLink>
                   }

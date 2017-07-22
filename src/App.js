@@ -76,24 +76,22 @@ class App extends Component {
 
     componentWillMount() {
         // cookie.save('name', 'radayani', {path:'/'});
-        console.log("component will mount" + localStorage.alias);
+        console.log("component will mount" + localStorage.alias + cookies.get());
 
 
     }
 
     constructor(props) {
-
+        localStorage.clear();
+        localStorage.setItem("alias", cookies.get('alias'));
+        console.log("alias" + cookies.get('alias'));
         super(props);
         // fetch('/')
         //     .then(res => res.json())
         //     .then(auth => this.setState({ auth: auth }, function () { console.log(auth + "auth mounted") }));
         console.log("app.js constructor called ");
         this.state = { userMode: '', auth: [], alias: '' };
-        cookies.set('myCat', 'Pacman', { path: '/' });
         console.log("cookie" + cookies.getAll()); // Pacman
-
-
-        // this.state = {onboarded:cookie.load('onboarded')};
     }
 
     render() {
@@ -102,34 +100,34 @@ class App extends Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <BrowserRouter>
                     <div className="App">
-                        <div className="App-header">
-                            <AppBarComp />
-                        </div>
+                    {
+                        // App headers starts from the first page when it goes there
+                    }                  
                         <Switch>
                             <PropsRoute exact path='/' component={Home} auth={auth} />
-                            <PropsRoute path='/user/:alias/register' component={RegisterComp} props="hi" />
+                            <PropsRoute exact path='/home/:pin/register' component={RegisterComp} props="hi" />
 
                             {//  <Route exact path={`/loginPage`} component={LoginPage} />
                             }
                             {/* Generate PIN */}
-                            <PropsRoute exact path={`/user/:alias`} component={GenerateMyPinComponent} pin={"pin mil gayi prop se"} />
+                            <PropsRoute exact path={`/home`} component={GenerateMyPinComponent} pin={"pin mil gayi"} />
 
                             {/* /radayani_13wsq2/userMode = voter */}
                             {/* /radayani_13wsq2/userMode = presenter */}
-                            <PropsRoute exact path="/user/:alias/:pin/userMode" component={UserModeComponent} />
+                            <PropsRoute exact path="/home/:alias/:pin/userMode" component={UserModeComponent} />
 
                             {/* /radayani_13wsq2/userMode/voter/myprojects = Button: Feedback/Continue Reading..*/}
                             {/* /radayani_13wsq2/userMode/presenter/myprojects = Button: Take Visiter Vote */}
                             {/* 24 Hours of Pain: 
                             <Route exact path="/:alias/:pin/userMode/:modeId/myProjects" component={MyProjectsCards} />*/}
-                            <PropsRoute exact path="/user/:alias/:pin/userMode/voter/myProjects" component={MyVotedProjectsCards} />
-                            <PropsRoute exact path="/user/:alias/:pin/userMode/voter/myProjects/:projId/feedback" component={DialogPopFeedback} />
-                            <PropsRoute exact path="/user/:alias/:pin/userMode/presenter/myProjects" component={MyRegisteredProjectsCards} />
-                            <PropsRoute exact path="/user/:alias/:pin/userMode/presenter/myProjects/:projId/votePage" component={DialogPopVote} />
+                            <PropsRoute exact path="/home/:alias/:pin/userMode/voter/myProjects" component={MyVotedProjectsCards} />
+                            <PropsRoute exact path="/home/:alias/:pin/userMode/voter/myProjects/:projId/feedback" component={DialogPopFeedback} />
+                            <PropsRoute exact path="/home/:alias/:pin/userMode/presenter/myProjects" component={MyRegisteredProjectsCards} />
+                            <PropsRoute exact path="/home/:alias/:pin/userMode/presenter/myProjects/:projId/votePage" component={DialogPopVote} />
 
                             {/* /radayani_13wsq2/userMode/voter/mainVotePage = Alias(already filled, disabled), PIN(already filled, disabled), Project(searchable) */}
                             {/* /radayani_13wsq2/userMode/presenter/mainVotePage = Alias(open), PIN(open), Project(searchable)  */}
-                            <Route exact path="/user/:alias/:pin/userMode/:modeId/mainVotePage" component={SearchFilterComponent} />
+                            <Route exact path="/home/:alias/:pin/userMode/:modeId/mainVotePage" component={SearchFilterComponent} />
 
                         </Switch>
                     </div>

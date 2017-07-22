@@ -60,12 +60,12 @@ class UserModeComponent extends React.Component {
             </Paper>
           }
           <br />
-          <NavLink to={`user/${this.props.match.url}/voter/mainVotePage`}>
+          <NavLink to={`home/${this.props.match.url}/voter/mainVotePage`}>
             <RaisedButton label="Voter" primary={true} style={style.button} onTouchTap={this.handleVoterButtonClick} />
           </NavLink>
           <br />
           <br />
-          <NavLink to={`user/${this.props.match.url}/presenter/myProjects`} >
+          <NavLink to={`home/${this.props.match.url}/presenter/myProjects`} >
             <RaisedButton label="Presenter" secondary={true} style={style.button} onTouchTap={this.handlePresenterButtonClick} />
           </NavLink>  
         </Paper>

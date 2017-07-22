@@ -200,7 +200,7 @@ if (localStorage.userMode === 'voter') {
                       <FlatButton label="Continue Reading..." style={styles.voterButton} />
                     </a>
                     {this.state.deviceWindow === 'narrowWindow' &&
-                      <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.key}/feedback?${this.state.deviceWindow}`} >
+                      <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.key}/feedback?${this.state.deviceWindow}`} >
                         <RaisedButton label="Feedback" />
                       </NavLink>
                     }
@@ -248,7 +248,7 @@ if (localStorage.userMode === 'voter') {
     //               </CardText>
     //               <CardActions>
     //                 {this.state.deviceWindow === 'narrowWindow' &&
-    //                   <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.key}/votePage?${this.state.deviceWindow}`} >
+    //                   <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects/${elem.key}/votePage?${this.state.deviceWindow}`} >
     //                     <FlatButton label="Take Vote" style={styles.presenterButton} />
     //                   </NavLink>
     //                 }

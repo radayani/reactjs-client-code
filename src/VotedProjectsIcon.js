@@ -86,18 +86,18 @@ export default class VotedProjectsIcon extends React.Component {
             <List className="alignLeft" >
               {localStorage.userMode === 'voter' &&
                 <div>
-                  <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/mainVotePage`} onTouchTap={this.handleToggle.bind(this, "Vote")} style={{ textDecoration: 'none' }}>
+                  <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/mainVotePage`} onTouchTap={this.handleToggle.bind(this, "Vote")} style={{ textDecoration: 'none' }}>
                     <ListItem
                       primaryText="Vote" />
                   </NavLink>
 
-                  <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects`} onTouchTap={this.handleToggle.bind(this, "My Voted Projects")} style={{ textDecoration: 'none' }}>
+                  <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects`} onTouchTap={this.handleToggle.bind(this, "My Voted Projects")} style={{ textDecoration: 'none' }}>
                     <ListItem primaryText="My Voted Projects" />
                   </NavLink>
 
 
 
-                  <NavLink exact to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects/register`} onTouchTap={this.handleToggle.bind(this, menuItems[3])} style={{ textDecoration: 'none' }} >
+                  <NavLink exact to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects/register`} onTouchTap={this.handleToggle.bind(this, menuItems[3])} style={{ textDecoration: 'none' }} >
                     <ListItem primaryText="Register for Science Fair" />
                   </NavLink>
                 </div>
@@ -120,7 +120,7 @@ export default class VotedProjectsIcon extends React.Component {
         </div>
       );
     }
-    else {
+    else if (localStorage.userMode === 'Presenter') {
       return (
         <div>
 
@@ -145,7 +145,7 @@ export default class VotedProjectsIcon extends React.Component {
               <List className="alignLeft" >
                 {localStorage.userMode === 'presenter' &&
                   <div>
-                    <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects`} onTouchTap={this.handleToggle.bind(this, "My Registered Projects")} style={{ textDecoration: 'none' }}>
+                    <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/${localStorage.userMode}/myProjects`} onTouchTap={this.handleToggle.bind(this, "My Registered Projects")} style={{ textDecoration: 'none' }}>
                       <ListItem
                         primaryText="My Projects" />
                     </NavLink>
@@ -170,6 +170,10 @@ export default class VotedProjectsIcon extends React.Component {
           </MuiThemeProvider>
         </div>
       );
+    }
+    else
+    {
+      return(<div></div>)
     }
   }
 }

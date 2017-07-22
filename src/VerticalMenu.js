@@ -3,7 +3,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import {fullWhite } from 'material-ui/styles/colors';
+import { fullWhite } from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
 import { NavLink } from "react-router-dom";
 
@@ -35,6 +35,11 @@ export default class VerticalMenu extends React.Component {
 
 
     }
+    handleButtonClick() {
+        window.location.replace('http://sfvotes.azurewebsites.net/api/logout')
+
+        // window.location.replace('http://localhost:3002/api/logout')
+    }
     handleOnRequestChange = (value) => {
         this.setState({
             open: value,
@@ -57,20 +62,20 @@ export default class VerticalMenu extends React.Component {
                         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
                         onRequestChange={this.handleOnRequestChange.bind(this)}
-                    >   
-                        <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)}>
+                    >
+                        <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)}>
                             {(localStorage.userMode === 'voter') &&
                                 <MenuItem value="1" primaryText="Presenter Mode" style={{ color: '#ff1493', textColor: '#ff1493' }} />
                             }
                         </NavLink>
 
-                        <NavLink to={`/user/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/mainVotePage`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)} >
+                        <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/mainVotePage`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)} >
                             {localStorage.userMode === 'presenter' &&
-                                <MenuItem value="2" primaryText="Voter Mode"  /> 
+                                <MenuItem value="2" primaryText="Voter Mode" />
                             }
                         </NavLink>
                         <Divider />
-                        <MenuItem value="3" primaryText="Logout" />
+                        <MenuItem value="3" primaryText="Logout" onTouchTap={this.handleButtonClick.bind(this)} />
                     </IconMenu>
                 </div>
             </MuiThemeProvider>

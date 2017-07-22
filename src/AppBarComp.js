@@ -13,7 +13,8 @@ const style = {
 }
 export default class AppBarComp extends React.Component {
     render() {
-        if (localStorage.myPIN != null && localStorage.userMode != null && localStorage.alias != null) {
+        // if (localStorage.myPIN != null && localStorage.userMode != null && localStorage.alias != null) {
+        if (localStorage.alias != null) {
             return (
                 <AppBar
                     style={style}

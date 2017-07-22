@@ -3,8 +3,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import { lightBlack, cyan50 } from 'material-ui/styles/colors';
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
+import AppBarComp from './AppBarComp';
 // import CopyToClipboard from 'react-copy-to-clipboard';
+import Cookies from 'universal-cookie';
 import shortid from 'shortid';
 const style = {
     paper: {
@@ -41,37 +43,44 @@ const style = {
         display: 'inline-block'
     }
 };
-       
 
+
+const cookies = new Cookies();
 export default class GenerateMyPinComponent extends React.Component {
     constructor(props) {
-
+        localStorage.setItem("alias", cookies.get('alias'));
+        if (cookies.get('myPIN')) {
+            console.log("PIN WAS SET");
+            localStorage.setItem("myPIN", cookies.get('myPIN'));
+        }
         super(props);
         console.log(this.props.pin);
+        console.log("cookie my pin: ");
+        console.log(cookies.get('myPIN'));
 
         console.log("PIN generation comp costructor called" + localStorage);
         this.state = {
             // copied: false,
-            myPIN: '--',
+            myPIN: cookies.get('myPIN'),
             open: false
         };
 
 
 
-        if (localStorage.alias !== this.props.match.params.alias) {
-            localStorage.setItem("alias", this.props.match.params.alias);
-        }
+        // if (localStorage.alias !== this.props.match.params.alias) {
+        //     localStorage.setItem("alias", this.props.match.params.alias);
+        // }
     }
 
     componentWillMount() {
-        console.log(this.state.myPIN);
-         
+        console.log(" pin: " + this.state.myPIN);
+
     }
     componentDidMount() {
-        localStorage.setItem("alias", this.props.match.params.alias);
-        console.log(this.state.myPIN);
-        
-        
+        // localStorage.setItem("alias", this.props.match.params.alias);
+        // console.log(this.state.myPIN);
+
+
 
     }
     handleRequestClose = () => {
@@ -91,13 +100,17 @@ export default class GenerateMyPinComponent extends React.Component {
         x = x.replace('/', 'x');
         localStorage.setItem("myPIN", x);
 
-        fetch(`/api/savePin?alias=${localStorage.alias}&UniquePin=${x}`, {
-
+        fetch(`/api/savePin`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
 
-            }
+            },
+            body: JSON.stringify({
+                'alias': localStorage.alias,
+                'unique_pin': x
+            })
         })
             .then(function (response) {
 
@@ -119,9 +132,14 @@ export default class GenerateMyPinComponent extends React.Component {
         this.setState({ myPIN: localStorage.myPIN });
     }
     render() {
-        {console.log("render..")}
+        { console.log("render..") }
         return (
             <div>
+                {localStorage.length > 0 &&
+                    <div className="App-header">
+                        <AppBarComp />
+                    </div>
+                }
                 <Paper style={style.paper} zDepth={3} >
                     <Paper zDepth={1} style={style.innerPaper}>
                         To cast your votes <br /> <b>directly at the booths</b> <br />during Science Fair.
@@ -129,13 +147,13 @@ export default class GenerateMyPinComponent extends React.Component {
                     <br />
                     <br />
 
-                     {!localStorage.myPIN
+                    {(!localStorage.myPIN || localStorage.myPIN == 'undefined') && (console.log(localStorage.myPIN))
                         &&
                         <RaisedButton label="Generate My PIN" primary={true} style={style.button} onTouchTap={this.handleButtonClick.bind(this)} />
                     }
 
-                    {localStorage.myPIN &&
-                         <div>
+                    {localStorage.myPIN != 'undefined' &&
+                        <div>
                             <RaisedButton
                                 label="Generate My PIN"
                                 disabled={true}
@@ -153,24 +171,26 @@ export default class GenerateMyPinComponent extends React.Component {
 
                             <span style={style.pinSpan}><b>{localStorage.myPIN}</b></span>
                             <Paper zDepth={1} style={style.msgPaper}>
-                                You'll need this <b>Voter's Code</b>!<br /> <br />No need to copy, you'll find your code in the menu on top left when in Voter Mode
+                                You'll need this <b>Voter's Code</b>!<br /> <br />No need to remember, <br /> you'll find your code in the menu on top left
                             </Paper>
 
                         </div>
                     }
                 </Paper>
                 <br />
-                
-                  {
+
+                {
                     localStorage.myPIN != null
                     &&
-                    <NavLink to={`user/${this.props.match.url}/${localStorage.myPIN}/userMode`}>
+                    <NavLink to={`/home/${localStorage.myPIN}/register`}>
+                        {// <NavLink to={`home/${this.props.match.url}/${localStorage.myPIN}/userMode`}>
+                        }
                         <RaisedButton label="Continue" primary={true} />
                     </NavLink>}
             </div>
         );
-    
-  
+
+
     }
 }
 

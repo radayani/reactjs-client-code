@@ -1,28 +1,21 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { Switch, Route, BrowserRouter, Redirect } from "react-router-dom"
-import Checkbox from 'material-ui/Checkbox';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { cyan100, redA700, green700, grey100 } from 'material-ui/styles/colors';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import GenerateMyPinComponent from './GenerateMyPinComponent';
-import UserModeComponent from './UserModeComponent';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-// import MyProjectsCards from './MyProjectsCards';
-import MyVotedProjectsCards from './MyVotedProjectsCards';
-import MyRegisteredProjectsCards from './MyRegisteredProjectsCards';
-import SearchFilterComponent from './SearchFilterComponent';
-import DialogPopFeedback from './DialogPopFeedback';
-import DialogPopVote from './DialogPopVote';
-import Cookies from 'universal-cookie';
-import LoginPage from './LoginPage';
-import Paper from 'material-ui/Paper';
-import Home from './Home';
-import AutoComplete from 'material-ui/AutoComplete';
+import AppBarComp from './AppBarComp';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+} from 'material-ui/Table';
+import Cookies from 'universal-cookie';
+import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Snackbar from 'material-ui/Snackbar';
@@ -40,7 +33,7 @@ const styles = {
     //     textAlign: 'left'
     // },
     margins: {
-        width: 310,
+        maxWidth: 600,
         marginTop: 8,
         padding: 10,
         display: 'inline-block',
@@ -50,6 +43,13 @@ const styles = {
     customWidth: {
         width: 300,
     },
+    registeredProjsMargin: {
+        marginTop: 8,
+        padding: 10,
+        display: 'inline-block',
+        marginBottom: 20,
+        maxWidth: 500
+    }
     // registerButton: {
     //     backgroundColor: cyan100,
     //     marginRight: 30,
@@ -59,25 +59,39 @@ const styles = {
 
 
 
-const dataSourceConfig = {
-    text: 'title',
-    value: 'id',
-};
+
 var projs = null;
 export default class RegisterComp extends Component {
     constructor(props) {
+        console.log("cookies.get" + cookies.get('alias'));
         localStorage.setItem("alias", cookies.get('alias'));
         super(props);
+
+        fetch(`/api/getAvailableVenue`, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        })
+            .then(res => res.json())
+            .then(venues => this.setState({ venues }, function () { console.log(venues) }));
         this.state = {
             venueListOpen: false,
             venueValue: -1,
+            locationValue: 'null',
+            registerButtonClicked: false,
+            registeredProjects: [],
             projectValue: -1,
             projects: [],
-            venues: null,
+            venues: [],
+            locations: [],
             chosenProjs: null,
             registered: false,
             alreadyRegistered: false,
             snackbarOpen: false,
+            projectSelected: false,
             options: [
                 { label: "CSS", value: "css" },
                 { label: "HTML", value: "html" },
@@ -126,6 +140,7 @@ export default class RegisterComp extends Component {
 
     // }
     componentWillMount() {
+
         fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
 
             headers: {
@@ -135,21 +150,55 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
+            .then(projects => this.setState({ projects }, function () { console.log("zzzzzz: "); console.log(projects) }));
+
+        fetch(`/api/getRegisteredProjects?alias=${localStorage.alias}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+
+        })
+            .then(res => res.json())
+            .then(registeredProjects => this.setState({ registeredProjects }, function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }))
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
 
 
     }
 
     componentWillUpdate() {
         console.log("will update");
+
+
     }
     handleRequestClose = () => {
+        fetch(`/api/getRegisteredProjects?alias=${localStorage.alias}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+
+        })
+            .then(res => res.json())
+            .then(registeredProjects => this.setState({ registeredProjects }, function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }))
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
         this.setState({
             snackbarOpen: false,
             projectValue: -1,
             venueValue: -1,
-            registered: false
+            locations: [],
+            locationValue: 'null',
+            registered: false,
+            registerButtonClicked: false,
+            projectSelected: false
         });
+
 
         fetch(`/api/getMyUnRegProjects?alias=${localStorage.alias}`, {
 
@@ -160,23 +209,51 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }));
+            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }))
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
+
+
 
 
     };
 
     handleProjectSelection(event, index, value) {
         console.log(event + " " + index + " " + value);
-        this.setState({ projectValue: value });
+        this.setState({ projectValue: value, projectSelected: true });
     }
+
     handleVenueSelection(event, index, value) {
-        console.log(event + " " + index + " " + value);
+        console.log(event + " " + index + " " + value + "location....");
         this.setState({ venueValue: value });
+
+        fetch(`/api/getAvailableLocation?venue=${value}`, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        })
+            .then(res => res.json())
+            .then(locations => this.setState({ locations }, function () { console.log(locations) }))
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err)
+            });
+
+    }
+    handleLocationSelection(event, index, value) {
+        console.log(event + " " + index + " " + value);
+        this.setState({ locationValue: value, venueId: value });
 
     }
     handleRegistrationButton() {
-        if (this.state.projectValue != -1 && this.state.venueValue != -1) {
-            fetch(`http://localhost:3002/api/registerProject`, {
+        if (this.state.projectValue === -1 || this.state.venueValue === -1) {
+            this.setState({ registerButtonClicked: true, snackbarOpen: true });
+        }
+        else if (this.state.projectValue != -1 && this.state.venueValue != -1) {
+            fetch(`/api/registerProject`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -185,7 +262,7 @@ export default class RegisterComp extends Component {
                 },
                 body: JSON.stringify({
                     'alias': localStorage.alias,
-                    'venue_id': this.state.venueValue,
+                    'venue_id': this.state.venueId,
                     'projects': this.state.projectValue
                 })
 
@@ -212,14 +289,20 @@ export default class RegisterComp extends Component {
                 });
 
 
-
         }
+
+
 
     }
     render() {
         console.log("render" + this.state.projects);
         return (
             <div >
+                {localStorage.length > 0 &&
+                    <div className="App-header">
+                        <AppBarComp />
+                    </div>
+                }
                 <Paper zDepth={1} style={styles.margins}>
                     <h3 style={{ marginTop: 10, textAlign: 'center' }}><b>Resgistration</b></h3>
 
@@ -231,6 +314,7 @@ export default class RegisterComp extends Component {
                     >
                         <MenuItem value={-1} primaryText="Select Project to Register" />
                         {this.state.projects.map(function (elem, i) {
+                            { console.log("PROJECTS" + this.state.projects.length) }
                             return (
                                 <MenuItem value={elem.id} primaryText={elem.name} key={i} />
                             );
@@ -248,40 +332,72 @@ export default class RegisterComp extends Component {
                         onChange={this.handleVenueSelection.bind(this)}
                         autoWidth={true}
                     >
-                        <MenuItem value={-1} primaryText="Demo Booth Venue Preference" />
-                        <MenuItem value={101} primaryText="Hyderabad: MPR B1" />
-                        <MenuItem value={102} primaryText="Hyderabad: MPR B2" />
-                        <MenuItem value={103} primaryText="Hyderabad: B1B2 Lane LG" />
-                        <MenuItem value={104} primaryText="Hyderabad: MPR B3" />
-                        <MenuItem value={105} primaryText="Hyderabad: B3 Lobby" />
+                        <MenuItem value={-1} primaryText="Venue Preference" />
+
+                        {this.state.venues.map(function (elem, i) {
+                            return (
+                                <MenuItem value={elem.venue} primaryText={elem.venue} key={i} />
+                            );
+                        }, this)}
 
                     </DropDownMenu>
-                    <br /><br /><br />
+
+                    <br />
+                    <br />
+
+                    <DropDownMenu
+                        style={styles.customWidth}
+                        value={this.state.locationValue}
+                        onChange={this.handleLocationSelection.bind(this)}
+                        autoWidth={true}
+                    >
+                        <MenuItem value={'null'} primaryText="Location Preference" />
+
+                        {this.state.locations.map(function (elem, i) {
+                            return (
+                                <MenuItem value={elem.id} primaryText={elem.Location} key={i} />
+                            );
+                        }, this)}
+
+                    </DropDownMenu>
+
+                    <br />
                     <RaisedButton label="Register" onTouchTap={this.handleRegistrationButton.bind(this)} />
+
+                </Paper><br />
+
+                {console.log("REGISTERED PRJECTS : " + this.state.registeredProjects)}
+                <br />
+                <Paper style={styles.registeredProjsMargin}>
+                    <h5 style={{ marginTop: 10, textAlign: 'left' }}>My Registered Projects</h5>
+
+                    <Table onRowSelection={this.handleRowSelection}>
+                        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+                            <TableRow>
+                                <TableHeaderColumn style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}> Registered Projects</TableHeaderColumn>
+                                <TableHeaderColumn>Venue</TableHeaderColumn>
+                                <TableHeaderColumn>Location</TableHeaderColumn>
+
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody displayRowCheckbox={false} showRowHover={true}>
+                            {
+                                this.state.registeredProjects.map(function (elem, i) {
+
+                                    return (
+                                        <TableRow striped={true} selectable={false} hoverable={true} key={i}>
+                                            <TableRowColumn style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>{elem.title}</TableRowColumn>
+                                            <TableRowColumn style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>{elem.venue}</TableRowColumn>
+                                            <TableRowColumn style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>{elem.Location}</TableRowColumn>
+                                        </TableRow>
+                                    );
+
+                                }, this)}
+
+                        </TableBody>
+                    </Table>
                 </Paper>
-                {this.state.projectValue == -1 && this.state.registered
-                    &&
-                    <Snackbar
-                        style={{ width: 300 }}
-                        open={this.state.snackbarOpen}
-                        message="Please Select a Project!"
-                        autoHideDuration={1000}
-                        bodyStyle={{ backgroundColor: redA700 }}
 
-                        onRequestClose={this.handleRequestClose.bind(this)} />
-                }
-
-                {this.state.venueValue == -1 && this.state.registered
-                    &&
-                    <Snackbar
-                        style={{ width: 300 }}
-                        open={this.state.snackbarOpen}
-                        message="Please Provide Booth Venue Preference!"
-                        autoHideDuration={1000}
-                        bodyStyle={{ backgroundColor: redA700 }}
-
-                        onRequestClose={this.handleRequestClose.bind(this)} />
-                }
                 {this.state.projectValue != -1 && this.state.venueValue != -1 && this.state.registered
                     &&
                     <Snackbar
@@ -290,6 +406,18 @@ export default class RegisterComp extends Component {
                         message="Registered Project Successfully!"
                         autoHideDuration={1000}
                         bodyStyle={{ backgroundColor: green700 }}
+
+                        onRequestClose={this.handleRequestClose.bind(this)} />
+                }
+
+                {this.state.registerButtonClicked && (this.state.projectValue === -1 || this.state.venueValue === -1)
+                    &&
+                    <Snackbar
+                        style={{ width: 300 }}
+                        open={this.state.snackbarOpen}
+                        message="Invalid Details!"
+                        autoHideDuration={1000}
+                        bodyStyle={{ backgroundColor: redA700 }}
 
                         onRequestClose={this.handleRequestClose.bind(this)} />
                 }
