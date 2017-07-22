@@ -147,12 +147,12 @@ export default class GenerateMyPinComponent extends React.Component {
                     <br />
                     <br />
 
-                    {(!localStorage.myPIN || localStorage.myPIN == 'undefined') && (console.log(localStorage.myPIN))
+                    {(!localStorage.myPIN || localStorage.myPIN == undefined) && (console.log( " print me "+localStorage.myPIN))
                         &&
                         <RaisedButton label="Generate My PIN" primary={true} style={style.button} onTouchTap={this.handleButtonClick.bind(this)} />
                     }
 
-                    {localStorage.myPIN != 'undefined' &&
+                    {localStorage.myPIN != undefined &&
                         <div>
                             <RaisedButton
                                 label="Generate My PIN"
