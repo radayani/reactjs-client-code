@@ -7,6 +7,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { cyan50, redA700 } from 'material-ui/styles/colors';
 import { darkBlack } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
+import AppBarComp from './AppBarComp';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const style = {
   margin: 15,
@@ -27,31 +31,6 @@ const dataSourceConfig = {
   text: 'title',
   value: 'id',
 };
-// const projects = [
-//   {title: 'Blood Connect is a big title to accommodate', id: '1'},
-//   {title: 'Blood For Sure', id: '2'},
-//   {title: 'Donate Blood', id: '3'},
-//   {title: 'Provide Blood', id: '4'},
-//   {title: 'Sure Can', id: '5'},
-//   {title: 'Connect People', id: '6'},
-//   {title: 'People Finder', id: '7'},
-//   {title: 'Love people', id: '8'},
-
-// ];
-
-// const projects =
-
-
-//  [
-//   'Blood Connect is a big title to accommodate',
-//   'Blood For Sure',
-//   'Donate Blood',
-//   'Provide Blood',
-//   'Sure Can',
-//   'Connect People',
-//   'People Finder',
-//   'Love people',
-// ];
 
 export default class SearchFilterComponent extends React.Component {
   constructor(props) {
@@ -80,22 +59,17 @@ export default class SearchFilterComponent extends React.Component {
 
       ]
     };
-    console.log(localStorage.userMode);
-   
-    if(localStorage.userMode !== 'presenter') 
-      localStorage.userMode = this.props.match.params.modeId;
+    // console.log(localStorage.userMode);
 
-    console.log("constructor for searchfiltercomponent " + this.state.chosenProject, this.state.chosenProjectId + localStorage.userMode);
+    // if(localStorage.userMode !== 'presenter') 
+    //   localStorage.userMode = this.props.match.params.modeId;
+
+    // console.log("constructor for searchfiltercomponent " + this.state.chosenProject, this.state.chosenProjectId + localStorage.userMode);
   }
 
   handleOpen = () => {
-
-    console.log(projDesc);
-
+    // console.log(projDesc);
     this.setState({ dialogOpen: true });
-
-
-    ;
   };
 
   handleClose = () => {
@@ -103,10 +77,10 @@ export default class SearchFilterComponent extends React.Component {
   };
 
   componentWillUnmount() {
-    console.log("unmounting Voter vote page ............ " + this.props.match.params.modeId);
+    // console.log("unmounting Voter vote page ............ ");
   }
   componentWillReceiveProps() {
-    console.log("component will receive props");
+    // console.log("component will receive props");
   }
 
   handleSelectForVotedProject = (chosenRequest, index) => {
@@ -121,7 +95,7 @@ export default class SearchFilterComponent extends React.Component {
 
 
 
-    console.log("chosen: " + chosenRequest.title, "...index: ", index);
+    // console.log("chosen: " + chosenRequest.title, "...index: ", index);
     this.setState({ chosenProject: chosenRequest.title, chosenProjectId: chosenRequest.id }, function () {
 
       fetch(`/api/projectDescription?id=${this.state.chosenProjectId}`, {
@@ -132,26 +106,35 @@ export default class SearchFilterComponent extends React.Component {
 
         }
       })
-        .then(function (response) {
-
-          if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-              response.status);
-            return;
-          }
-
-          // Examine the text in the response  
-          response.json()
-            .then(function (data) {
-              console.log(data);
-              projDesc = data;
-              console.log(projDesc);
-            });
-        })
-        .then(this.setState({ chosenProjectDescription: projDesc }))
+        .then(res => res.json())
+        .then(chosenProjectDescription => this.setState({ chosenProjectDescription }
+        // , function () { console.log(chosenProjectDescription + " render now please..") }
+        ))
         .catch(function (err) {
           console.log('Fetch Error :-S', err);
-        })
+        });
+
+      // .then(function (response) {
+
+      //   if (response.status !== 200) {
+      //     console.log('Looks like there was a problem. Status Code: ' +
+      //       response.status);
+      //     return;
+      //   }
+
+      //   // Examine the text in the response  
+      //   response.json()
+      //     .then(function (data) {
+      //       console.log(data);
+      //       projDesc = data;
+      //       console.log(projDesc);
+      //     });
+      // })
+      // .then(this.setState({ chosenProjectDescription: projDesc }))
+      // .then(console.log("FETCHED PROJECT DESC"))
+      // .catch(function (err) {
+      //   console.log('Fetch Error :-S', err);
+      // })
 
 
     });
@@ -165,7 +148,7 @@ export default class SearchFilterComponent extends React.Component {
   };
 
   handleVoteButton = (x) => {
-    console.log(this.state.searchedText + this.state.chosenProject);
+    // console.log(this.state.searchedText + this.state.chosenProject);
     if (this.state.searchedText === this.state.chosenProject) {
 
 
@@ -180,8 +163,8 @@ export default class SearchFilterComponent extends React.Component {
         .then(function (response) {
 
           if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-              response.status);
+            // console.log('Looks like there was a problem. Status Code: ' +
+              // response.status);
             return;
           }
 
@@ -215,13 +198,12 @@ export default class SearchFilterComponent extends React.Component {
         projDesc = null;
       })
     }
-    // CALL API TO SAVE THIS VOTE
   }
 
   handleSearchUpdate(searchText, dataSource, params) {
-    console.log(searchText);
+    // console.log(searchText);
 
-    console.log(dataSource);
+    // console.log(dataSource);
     // this.setState({ searchedText: searchText, projects:this.state.projects });
 
     if (searchText.length > 2) {
@@ -236,17 +218,17 @@ export default class SearchFilterComponent extends React.Component {
         .then(function (response) {
 
           if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-              response.status);
+            // console.log('Looks like there was a problem. Status Code: ' +
+              // response.status);
             return;
           }
 
           // Examine the text in the response  
           response.json()
             .then(function (data) {
-              console.log(data);
+              // console.log(data);
               projs = data;
-              console.log(projs);
+              // console.log(projs);
             });
         }, this.setState({ projects: projs })
         )
@@ -258,7 +240,9 @@ export default class SearchFilterComponent extends React.Component {
     // .then(function(res){
     //   this.setState({projects: res.json().then(function(data){console.log(data)})});
     // })
-    this.setState({ searchedText: searchText }, function () { console.log("searched updated to:" + this.state.searchedText) });
+    this.setState({ searchedText: searchText }
+    // , function () { console.log("searched updated to:" + this.state.searchedText) }
+    );
 
 
   }
@@ -279,80 +263,87 @@ export default class SearchFilterComponent extends React.Component {
     ];
 
     return (
-      <div className='newline'>
-        <TextField
+              <div>
 
-          disabled={true}
-          id="alias-field"
-          floatingLabelText={localStorage.alias}
-          style={{ margin: 2 }}
-        />
-        <TextField
-
-          disabled={true}
-          id="pin-field"
-          floatingLabelText={localStorage.myPIN}
-          style={{ margin: 2 }}
-        />
-
-        <AutoComplete
-          onNewRequest={this.handleSelectForVotedProject.bind(this)}
-          floatingLabelText={"Search Project Name"}
-          filter={AutoComplete.caseInsensitiveFilter}
-          searchText={this.state.searchedText}
-          onUpdateInput={this.handleSearchUpdate.bind(this)}
-          // dataSource={this.state.matchedPojects}
-          dataSource={this.state.projects}
-          dataSourceConfig={dataSourceConfig}
-          maxSearchResults={10}
-          style={{ margin: 2 }}
-          textFieldStyle={{ margin: 2 }}
-        />
-
-        <div className='sameline'>
-
-          {(this.state.chosenProjectId != null) ?
-            <FlatButton label="Details..." style={style.button} onTouchTap={this.handleOpen.bind(this)} /> : <FlatButton label="Details..." style={style.button.disabled} disabled={true} />
-          }
-          {localStorage.userMode === 'voter'
-            &&
-            <RaisedButton label="Vote" primary={true} style={style} onTouchTap={this.handleVoteButton.bind(this)} />
-          }
+        <div className="App-header">
+          <AppBarComp />
         </div>
 
-        <Dialog
-          title={this.state.chosenProject}
-          actions={actions}
-          modal={false}
-          open={this.state.dialogOpen}
-          autoScrollBodyContent={true}
-          onRequestClose={this.handleClose}>
+        <div className='newline'>
+          <TextField
 
-          {projDesc}
+            disabled={true}
+            id="alias-field"
+            floatingLabelText={localStorage.alias}
+            style={{ margin: 2 }}
+          />
+          <TextField
 
-        </Dialog>
-        {(this.state.voteSaved && !this.state.alreadyVoted) &&
-          <Snackbar
-            open={this.state.snackbarOpen}
-            message={"Successfully Saved Your Vote!"}
-            autoHideDuration={2000}
-            onRequestClose={this.handleRequestClose} />}
+            disabled={true}
+            id="pin-field"
+            floatingLabelText={localStorage.myPIN}
+            style={{ margin: 2 }}
+          />
 
-        {this.state.invalidProjectSelected &&
-          <Snackbar
-            open={this.state.snackbarOpen}
-            message={"Not a Valid Project!"}
-            autoHideDuration={2000}
-            bodyStyle={{ backgroundColor: redA700 }}
-            onRequestClose={this.handleRequestClose} />}
-        {this.state.alreadyVoted &&
-          <Snackbar
-            open={this.state.snackbarOpen}
-            message={"Already Voted For This One!"}
-            autoHideDuration={2000}
-            bodyStyle={{ backgroundColor: redA700 }}
-            onRequestClose={this.handleRequestClose} />}
+          <AutoComplete
+            onNewRequest={this.handleSelectForVotedProject.bind(this)}
+            floatingLabelText={"Search Project Name"}
+            filter={AutoComplete.caseInsensitiveFilter}
+            searchText={this.state.searchedText}
+            onUpdateInput={this.handleSearchUpdate.bind(this)}
+            // dataSource={this.state.matchedPojects}
+            dataSource={this.state.projects}
+            dataSourceConfig={dataSourceConfig}
+            maxSearchResults={20}
+            style={{ margin: 2 }}
+            textFieldStyle={{ margin: 2 }}
+          />
 
+          <div className='sameline'>
+
+            {(this.state.chosenProjectId != null) ?
+              <FlatButton label="Details..." style={style.button} onTouchTap={this.handleOpen.bind(this)} /> : <FlatButton label="Details..." style={style.button.disabled} disabled={true} />
+            }
+            {localStorage.userMode == 'voter'
+              &&
+              <RaisedButton label="Vote" primary={true} style={style} onTouchTap={this.handleVoteButton.bind(this)} />
+            }
+          </div>
+
+          <Dialog
+            title={this.state.chosenProject}
+            actions={actions}
+            modal={false}
+            open={this.state.dialogOpen}
+            autoScrollBodyContent={true}
+            onRequestClose={this.handleClose}>
+
+            {this.state.chosenProjectDescription}
+
+          </Dialog>
+          {(this.state.voteSaved && !this.state.alreadyVoted) &&
+            <Snackbar
+              open={this.state.snackbarOpen}
+              message={"Successfully Saved Your Vote!"}
+              autoHideDuration={2000}
+              onRequestClose={this.handleRequestClose} />}
+
+          {this.state.invalidProjectSelected &&
+            <Snackbar
+              open={this.state.snackbarOpen}
+              message={"Not a Valid Project!"}
+              autoHideDuration={2000}
+              bodyStyle={{ backgroundColor: redA700 }}
+              onRequestClose={this.handleRequestClose} />}
+          {this.state.alreadyVoted &&
+            <Snackbar
+              open={this.state.snackbarOpen}
+              message={"Already Voted For This One!"}
+              autoHideDuration={2000}
+              bodyStyle={{ backgroundColor: redA700 }}
+              onRequestClose={this.handleRequestClose} />}
+
+        </div>
       </div>
     );
   }

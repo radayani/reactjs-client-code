@@ -7,12 +7,15 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import SearchFilterComponent from './SearchFilterComponent';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
+import AppBarComp from './AppBarComp';
 import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
-import { pinkA200, redA700, fullWhite } from 'material-ui/styles/colors';
+import FooterContent from './FooterContent';
+
+import { pinkA200, pink50, redA700, fullWhite } from 'material-ui/styles/colors';
 
 const projects = [
-   
+
 ];
 
 const styles = {
@@ -29,7 +32,7 @@ const styles = {
         padding: 5,
         marginBottom: 0,
         display: 'inline-block',
-        incompleteDetails: false,
+
     }
 }
 export default class DialogPopVote extends React.Component {
@@ -40,6 +43,10 @@ export default class DialogPopVote extends React.Component {
             snackbarOpen: false,
             invalidProjectSelected: false,
             alreadyVoted: false,
+            chosenProjectTitle: '',
+            voterAlias: null,
+            voterPin: null,
+            incompleteDetails: false,
         };
     }
 
@@ -47,13 +54,98 @@ export default class DialogPopVote extends React.Component {
         this.setState({ snackbarOpen: false, incompleteDetails: false, });
     }
 
-    handleVoteButton() {
-        this.setState({ voteSaved: true, snackbarOpen: true, incompleteDetails: true, });
+
+    handleBroadWinVoteButton() {
+        // console.log(this.state.incompleteDetails + " incomp details ???? broad");
+
+        if (!this.state.voterPin || !this.state.voterAlias) {
+            this.setState({ snackbarOpen: true, incompleteDetails: true, });
+        }
+        else {
+            fetch(`/api/castVote?id=${this.props.presenterSelectedProjId}&alias=${this.state.voterAlias}`, {
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+
+                }
+            })
+                .then(function (response) {
+
+                    if (response.status !== 200) {
+                        // console.log('Looks like there was a problem. Status Code: ' +
+                        // response.status);
+                        return;
+                    }
+
+
+                    // Examine the text in the response  
+                    // response.json()
+                    // .then(function (data) {
+                    //   console.log(data);  
+                    //   projs=data;
+                    //   console.log(projs);
+                    // });
+                }
+                )
+                .then(this.setState({ successfullySavedVote: true, voteSaved: true, snackbarOpen: true, incompleteDetails: false, voterAlias: null, voterPin: null, pinAdded: false, aliasAdded: false }))
+                .catch(function (err) {
+                    console.log('Fetch Error :-S', err);
+                });
+
+        }
+
+
+        // this.setState({ voteSaved: true, snackbarOpen: true, incompleteDetails: true, });
         // CALL API TO SAVE THIS VOTE
     }
-    handleSearchUpdate(searchText, dataSource, params) {
-        this.setState({ searchedText: searchText });
+
+    handleNarrowWinVoteButton() {
+        // console.log(this.state.incompleteDetails + " incomp details ????");
+
+        if (!this.state.voterPin || !this.state.voterAlias) {
+            this.setState({ snackbarOpen: true, incompleteDetails: true, });
+        }
+        else {
+            fetch(`/api/castVote?id=${this.props.match.params.projId}&alias=${this.state.voterAlias}`, {
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+
+                }
+            })
+                .then(function (response) {
+
+                    if (response.status !== 200) {
+                        // console.log('Looks like there was a problem. Status Code: ' +
+                        // response.status);
+                        return;
+                    }
+
+
+                    // Examine the text in the response  
+                    // response.json()
+                    // .then(function (data) {
+                    //   console.log(data);  
+                    //   projs=data;
+                    //   console.log(projs);
+                    // });
+                }
+                )
+                .then(this.setState({ successfullySavedVote: true, voteSaved: true, snackbarOpen: true, incompleteDetails: false, voterAlias: null, voterPin: null, pinAdded: false, aliasAdded: false }))
+                .catch(function (err) {
+                    console.log('Fetch Error :-S', err);
+                });
+
+
+        }
+
+        // CALL API TO SAVE THIS VOTE
     }
+    // handleSearchUpdate(searchText, dataSource, params) {
+    //     this.setState({ searchedText: searchText });
+    // }
 
     handleClose() {
         if (this.props.votepageOpen)
@@ -62,18 +154,41 @@ export default class DialogPopVote extends React.Component {
             this.props.history.goBack();
     }
 
-    handleSelectForVotedProject = (chosenRequest, index) => {
+    componentDidMount() {
+        // console.log("PROPS TITLE" + this.props.votepageOpen);
+        if (!this.props.votepageOpen) {
+            fetch(`/api/projectTitle?id=${this.props.match.params.projId}`, {
 
-        // check if already voted for this searched project
-        // Call GET_MyVotedProjects
-        // if(myvotedProjects.contains(chosenProject)){
-        // this.setState({alreadyVoted:true}, function{
-        // console.log("Already voted for this project!");
-        // })
-        // }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
 
-        console.log("chosen: " + chosenRequest, "...index: ", index);
-        this.setState({ chosenProject: chosenRequest });
+                }
+            })
+                .then(res => res.json())
+                .then(chosenProjectTitle => this.setState({ chosenProjectTitle }
+                    // , function () { console.log(chosenProjectTitle + " render now please..") }
+                ))
+                .catch(function (err) {
+                    console.log('Fetch Error :-S', err);
+                });
+        }
+    }
+
+    handlePinUpdate(event, newValue) {
+        this.setState({ voterPin: newValue, pinAdded: true });
+        // if (newValue && this.state.aliasAdded)
+        //     this.setState({ pinAdded: true, incompleteDetails: false });
+        // else
+        //     this.setState({ pinAdded: false });
+        //             this.setState({  });
+    }
+    handleAliasUpdate(event, newValue) {
+        this.setState({ voterAlias: newValue, });
+        // if (newValue)
+        //     this.setState({ aliasAdded: true });
+        // if (this.state.pinAdded)
+        //     this.setState({ incompleteDetails: false });
     }
 
     render() {
@@ -89,140 +204,160 @@ export default class DialogPopVote extends React.Component {
                         label="Vote"
                         secondary={true}
                         keyboardFocused={true}
-                        onTouchTap={this.handleVoteButton.bind(this)}
+                        onTouchTap={this.handleBroadWinVoteButton.bind(this)}
                     />
                 </div>
             ];
 
             return (
-                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
-                    <Dialog
-                        title={this.props.presenterSelectedProj}
-                        actions={presenterActions}
-                        modal={true}
-                        open={this.props.votepageOpen}
-                        autoScrollBodyContent={false}
-                        onRequestClose={this.handleClose.bind(this)}>
+                <div className="content">
+                    <div className="App-footer" style={{ backgroundColor: pink50 }}>
+                        <FooterContent />
+                    </div>
+                    <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
+                        <Dialog
+                            title={this.props.presenterSelectedProj}
+                            actions={presenterActions}
+                            modal={true}
+                            open={this.props.votepageOpen}
+                            autoScrollBodyContent={false}
+                            onRequestClose={this.handleClose.bind(this)}>
 
-                         <div className='newline'>
-                            <TextField
+                            <div className='newline'>
+                                <TextField
 
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                disabled={false}
-                                id="alias-field"
-                                floatingLabelText="Alias"
-                                style={{ margin: 2 }} />
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="alias-field"
+                                    floatingLabelText="Alias"
+                                    style={{ margin: 2 }}
+                                    onChange={this.handleAliasUpdate.bind(this)} />
 
-                            <TextField
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                disabled={false}
-                                id="pin-field"
-                                floatingLabelText="Your PIN"
-                                style={{ margin: 2 }} />
+                                <TextField
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="pin-field"
+                                    floatingLabelText="Your PIN"
+                                    style={{ margin: 2 }}
+                                    onChange={this.handlePinUpdate.bind(this)} />
 
-                            <AutoComplete
-                                onNewRequest={this.handleSelectForVotedProject.bind(this)}
-                                floatingLabelText="Project Name"
-                                filter={AutoComplete.caseInsensitiveFilter}
-                                searchText={this.props.presenterSelectedProj}             // FETCH PROJECT NAME FROM PROJECT ID
-                                onUpdateInput={this.handleSearchUpdate.bind(this)}
-                                dataSource={projects}
-                                maxSearchResults={10}
-                                style={{ margin: 2 }}
-                                textFieldStyle={{ margin: 2 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                            />
+
+                                <TextField
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="project-field"
+                                    floatingLabelText={this.props.presenterSelectedProj}
+                                    disabled={true}
+                                    style={{ margin: 2 }} />
+
                             </div>
+                            {this.state.incompleteDetails && !this.state.voteSaved &&
+                                <Snackbar
+                                    style={{ width: 260 }}
+                                    open={this.state.snackbarOpen}
+                                    message={"Alias or Voter Code Invalid"}
+                                    contentStyle={{ color: fullWhite }}
 
-                        {this.state.voteSaved
-                            &&
-                            <Snackbar
-                                style={{ width: 210 }}
-                                open={this.state.snackbarOpen}
-                                message="Voted Saved Successfully"
-                                autoHideDuration={500}
-                                onRequestClose={this.handleRequestClose.bind(this)} />}
-                    </Dialog>
-                </MuiThemeProvider>
+                                    autoHideDuration={1000}
+                                    bodyStyle={{ backgroundColor: redA700 }}
+                                    onRequestClose={this.handleRequestClose.bind(this)} />}
+
+                            {!this.state.incompleteDetails && this.state.voteSaved
+                                &&
+                                <Snackbar
+                                    style={{ width: 260 }}
+                                    open={this.state.snackbarOpen}
+                                    message="Vote Saved Successfully!"
+                                    autoHideDuration={1000}
+                                    onRequestClose={this.handleRequestClose.bind(this)} />}
+                        </Dialog>
+                    </MuiThemeProvider>
+                </div>
             );
         }
         return (
-            <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
-                <Paper zDepth={1} style={styles.margins}>
-                    <div style={{ marginTop: 10 }}><b>Vote</b>
-
-                        <div className='newline'>
-                            <TextField
-
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                disabled={false}
-                                id="alias-field"
-                                floatingLabelText="Alias"
-                                style={{ margin: 2 }} />
-
-                            <TextField
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                disabled={false}
-                                id="pin-field"
-                                floatingLabelText="Your PIN"
-                                style={{ margin: 2 }} />
-
-                            <AutoComplete
-                                onNewRequest={this.handleSelectForVotedProject.bind(this)}
-                                floatingLabelText="Project Name"
-                                filter={AutoComplete.caseInsensitiveFilter}
-                                searchText={this.props.match.params.projId}             // FETCH PROJECT NAME FROM PROJECT ID
-                                onUpdateInput={this.handleSearchUpdate.bind(this)}
-                                dataSource={projects}
-                                maxSearchResults={10}
-                                style={{ margin: 2 }}
-                                textFieldStyle={{ margin: 2 }}
-                                underlineFocusStyle={{ borderColor: pinkA200 }}
-                                floatingLabelFocusStyle={{ color: pinkA200 }}
-                            />
-
-                            <div className='sameline' style={{ marginTop: 30 }}>
-
-                                <FlatButton
-                                    label="Close"
-                                    secondary={true}
-                                    onTouchTap={this.handleClose.bind(this)} />
-
-                                <FlatButton
-                                    label="Vote"
-                                    secondary={true}
-                                    keyboardFocused={true}
-                                    onTouchTap={this.handleVoteButton.bind(this)} />
-
-                            </div>
-
-                            {(this.state.voteSaved) &&
-                                <Snackbar
-                                    open={this.state.snackbarOpen}
-                                    message={"Successfully Saved Your Vote!"}
-                                    bodyStyle={{ backgroundColor: pinkA200 }}
-                                    contentStyle={{ color: fullWhite }}
-
-                                    autoHideDuration={2000}
-                                    onRequestClose={this.handleRequestClose.bind(this)} />}
-
-                            {this.state.invalidProjectSelected &&
-                                <Snackbar
-                                    open={this.state.snackbarOpen}
-                                    message={"Not a Valid Project!"}
-                                    autoHideDuration={2000}
-                                    bodyStyle={{ backgroundColor: redA700 }}
-                                    contentStyle={{ color: fullWhite }}
-                                    onRequestClose={this.handleRequestClose.bind(this)} />}
-                        </div>
+            <div className="content">
+                <div className="App-footer" style={{ backgroundColor: pink50 }}>
+                    <FooterContent />
+                </div>
+                {localStorage.length > 0 &&
+                    <div className="App-header">
+                        <AppBarComp />
                     </div>
-                </Paper>
-            </MuiThemeProvider>
+                }
+                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
+                    <Paper zDepth={1} style={styles.margins}>
+                        <div style={{ marginTop: 10 }}><b>{this.state.chosenProjectTitle}</b>
+
+                            <div className='newline'>
+                                <TextField
+
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="alias-field"
+                                    floatingLabelText="Alias"
+                                    onChange={this.handleAliasUpdate.bind(this)}
+                                    style={{ margin: 2 }} />
+
+                                <TextField
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="pin-field"
+                                    floatingLabelText="Your PIN"
+                                    onChange={this.handlePinUpdate.bind(this)}
+                                    style={{ margin: 2 }} />
+
+                                <TextField
+                                    floatingLabelFocusStyle={{ color: pinkA200 }}
+                                    underlineFocusStyle={{ borderColor: pinkA200 }}
+                                    disabled={false}
+                                    id="project-field"
+                                    floatingLabelText={this.state.chosenProjectTitle}
+                                    disabled={true}
+                                    style={{ margin: 2 }} />
+                                <div className='sameline' style={{ marginTop: 30 }}>
+
+                                    <FlatButton
+                                        label="Close"
+                                        secondary={true}
+                                        onTouchTap={this.handleClose.bind(this)} />
+
+                                    <FlatButton
+                                        label="Vote"
+                                        secondary={true}
+                                        keyboardFocused={true}
+                                        onTouchTap={this.handleNarrowWinVoteButton.bind(this)} />
+
+                                </div>
+
+                                {this.state.incompleteDetails && !this.state.voteSaved &&
+                                    <Snackbar
+                                        open={this.state.snackbarOpen}
+                                        message={"Alias or Voter Code Invalid"}
+                                        contentStyle={{ color: fullWhite }}
+                                        autoHideDuration={1000}
+                                        bodyStyle={{ backgroundColor: redA700 }}
+                                        onRequestClose={this.handleRequestClose.bind(this)} />}
+
+                                {!this.state.incompleteDetails && this.state.voteSaved &&
+                                    <Snackbar
+                                        open={this.state.snackbarOpen}
+                                        message={"Vote Saved Successfully!"}
+                                        bodyStyle={{ backgroundColor: pinkA200 }}
+                                        contentStyle={{ color: fullWhite }}
+
+                                        autoHideDuration={1000}
+                                        onRequestClose={this.handleRequestClose.bind(this)} />}
+                            </div>
+                        </div>
+                    </Paper>
+                </MuiThemeProvider>
+            </div>
         );
     }
 }

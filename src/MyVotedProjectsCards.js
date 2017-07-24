@@ -1,4 +1,6 @@
 import React from 'react';
+import AppBarComp from './AppBarComp';
+
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import { cyan100, pinkA200, lightBlack } from 'material-ui/styles/colors';
@@ -9,7 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import DialogPopFeedback from './DialogPopFeedback';
 import DialogPopVote from './DialogPopVote';
 import { NavLink } from "react-router-dom"
-
+import FooterContent from './FooterContent';
 const styles = {
   voterButton: {
     backgroundColor: cyan100,
@@ -21,8 +23,8 @@ export default class MyVotedProjectsCards extends React.Component {
   constructor(props) {
     super(props);
     localStorage.setItem("userMode", "voter");
-    console.log("my voted projects comp constructor" + localStorage.userMode);
-    console.log(" URL " + this.props.match.params.modeId);
+    // console.log("my voted projects comp constructor" + localStorage.userMode);
+    // console.log(" URL " + this.props.match.params.modeId);
     this.state = {
       votedProjects: [],
       feedbackOpen: false,
@@ -33,28 +35,34 @@ export default class MyVotedProjectsCards extends React.Component {
 
   updateDimensions() {
     if (window.innerWidth < 400) {
-      this.setState({ deviceWindow: 'narrowWindow' }, function () { console.log("device window set, rerender...") });
+      this.setState({ deviceWindow: 'narrowWindow' }
+      // , function () { console.log("device window set, rerender...") }
+      );
     }
     else {
-      this.setState({ deviceWindow: 'broadWindow' }, function () { console.log("device window set, rerender...") });
+      this.setState({ deviceWindow: 'broadWindow' }
+      // , function () { console.log("device window set, rerender...") }
+      );
     }
   }
   componentWillUnmount() {
-    console.log("unmouting Projects List page.............." + localStorage.userMode);
+    // console.log("unmouting Projects List page.............." + localStorage.userMode);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("comp received PROPS: " + this.props.match.url + " nextprops:" + nextProps.match.url);
+    // console.log("comp received PROPS: " + this.props.match.url + " nextprops:" + nextProps.match.url);
     if (this.props.match.url !== nextProps.match.url && localStorage.userMode == 'voter') {
-      console.log("VOTED PROJS LIST API CALLED")
+      // console.log("VOTED PROJS LIST API CALLED")
       fetch(`/api/votedProjects?alias=${localStorage.alias}`)
         .then(res => res.json())
-        .then(votedProjects => this.setState({ votedProjects }, function () { console.log(votedProjects + " render now please..") }));
+        .then(votedProjects => this.setState({ votedProjects }
+        // , function () { console.log(votedProjects + " render now please..") }
+        ));
     }
   }
 
   componentWillUpdate(nextProps) {
-    console.log("component will udpate " + localStorage.userMode + " nextprops:" + localStorage.userMode);
+    // console.log("component will udpate " + localStorage.userMode + " nextprops:" + localStorage.userMode);
   }
 
   shouldComponentUpdate() {
@@ -62,12 +70,12 @@ export default class MyVotedProjectsCards extends React.Component {
   }
 
   componentDidMount() {
-    console.log("THIS !!!!!  project list did mount" + localStorage.userMode);
+    // console.log("THIS !!!!!  project list did mount" + localStorage.userMode);
     if (localStorage.userMode === 'voter') {
-      console.log("VOTED PROJS LIST API CALLED");
-      
+      // console.log("VOTED PROJS LIST API CALLED");
+
       fetch(`/api/votedProjects?alias=${localStorage.alias}`, {
-        
+
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -76,7 +84,9 @@ export default class MyVotedProjectsCards extends React.Component {
       })
 
         .then(res => res.json())
-        .then(votedProjects => this.setState({ votedProjects }, function () { console.log(votedProjects + "votedProjects set.. should be able to render the change now") }));
+        .then(votedProjects => this.setState({ votedProjects }
+        // , function () { console.log(votedProjects + "votedProjects set.. should be able to render the change now") }
+        ));
     }
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
@@ -84,7 +94,7 @@ export default class MyVotedProjectsCards extends React.Component {
   }
 
   componentWillMount() {
-    console.log("mounting projects list page................ " + localStorage.userMode)
+    // console.log("mounting projects list page................ " + localStorage.userMode)
     localStorage.setItem("userMode", "voter");
     window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
@@ -98,47 +108,52 @@ export default class MyVotedProjectsCards extends React.Component {
   };
 
   componentDidUpdate() {
-    console.log("component did update");
+    // console.log("component did update");
   }
 
   render() {
     return (
-      <div className="default">
-        {
-          this.state.votedProjects.map(function (elem, i) {
-            return (
-              <Card key={i}>
-                <CardHeader
+       <div className="default">
+        {localStorage.length > 0 &&
+          <div className="App-header">
+            <AppBarComp />
+          </div>
+        }
+          {
+            this.state.votedProjects.map(function (elem, i) {
+              return (
+                <Card key={i}>
+                  <CardHeader
 
-                  title={elem.title}
-                  subtitle={elem.tagline}
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                <CardText expandable={true}>
-                  {elem.description}
-                </CardText>
-                <CardActions>
-                  <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel="noopener noreferrer"  >
-                    <FlatButton label="Continue Reading..." style={styles.voterButton} />
-                  </a>
-                  {this.state.deviceWindow === 'narrowWindow' &&
-                    <NavLink to={`/api/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.id}/feedback?${this.state.deviceWindow}`} >
-                      <RaisedButton label="Feedback" />
-                    </NavLink>
-                  }
-                  {this.state.deviceWindow === 'broadWindow' &&
-                    <RaisedButton label="Feedback" onTouchTap={this.handleOpen.bind(this, elem.title)} />
-                  }
-                </CardActions>
-              </Card>
-            );
-          }, this)}
+                    title={elem.title}
+                    subtitle={elem.tagline}
+                    actAsExpander={true}
+                    showExpandableButton={true}
+                  />
+                  <CardText expandable={true}>
+                    {elem.description}
+                  </CardText>
+                  <CardActions>
+                    <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel="noopener noreferrer"  >
+                      <FlatButton label="Continue Reading..." style={styles.voterButton} />
+                    </a>
+                    {this.state.deviceWindow === 'narrowWindow' &&
+                      <NavLink to={`/api/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.id}/feedback?${this.state.deviceWindow}`} >
+                        <RaisedButton label="Feedback" />
+                      </NavLink>
+                    }
+                    {this.state.deviceWindow === 'broadWindow' &&
+                      <RaisedButton label="Feedback" onTouchTap={this.handleOpen.bind(this, elem.title)} />
+                    }
+                  </CardActions>
+                </Card>
+              );
+            }, this)}
 
-        {this.state.feedbackOpen
-          &&
-          <DialogPopFeedback voterSelectedProj={this.state.voterSelectedProj} feedbackOpen={this.state.feedbackOpen} onCloseCallback={this.handleClose.bind(this)} isItPhoneWindow={this.state.phoneWindow} />}
-      </div>
+          {this.state.feedbackOpen
+            &&
+            <DialogPopFeedback voterSelectedProj={this.state.voterSelectedProj} feedbackOpen={this.state.feedbackOpen} onCloseCallback={this.handleClose.bind(this)} isItPhoneWindow={this.state.phoneWindow} />}
+        </div>
     );
   }
 }

@@ -63,17 +63,21 @@ export default class VerticalMenu extends React.Component {
                         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
                         onRequestChange={this.handleOnRequestChange.bind(this)}
                     >
-                        <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/presenter/myProjects`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)}>
+                        <NavLink to={`/home/${localStorage.myPIN}/userMode/presenter/projects`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)}>
                             {(localStorage.userMode === 'voter') &&
                                 <MenuItem value="1" primaryText="Presenter Mode" style={{ color: '#ff1493', textColor: '#ff1493' }} />
                             }
                         </NavLink>
 
-                        <NavLink to={`/home/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/mainVotePage`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)} >
+                        <NavLink to={`/home/${localStorage.myPIN}/userMode/voter/vote`} style={{ textDecoration: 'none' }} onTouchTap={this.handleNavLinkClick.bind(this)} >
                             {localStorage.userMode === 'presenter' &&
                                 <MenuItem value="2" primaryText="Voter Mode" />
                             }
                         </NavLink>
+
+                        {(localStorage.userMode !== 'presenter' && localStorage.userMode != 'voter') &&
+                                <MenuItem value="2" disabled={true} primaryText="User? or Presenter?" />
+                            }
                         <Divider />
                         <MenuItem value="3" primaryText="Logout" onTouchTap={this.handleButtonClick.bind(this)} />
                     </IconMenu>

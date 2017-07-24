@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { cyan100, pinkA200, lightBlack } from 'material-ui/styles/colors';
+import { cyan100, cyan50, pinkA200, lightBlack } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
@@ -35,7 +35,7 @@ const styles = {
 export default class MyProjectsCards extends React.Component {
   constructor(props) {
     super(props);
-    console.log(" URL " + this.props.match.params.modeId);
+    // console.log(" URL " + this.props.match.params.modeId);
     this.state = {
       votedProjects: [],
       registeredProjects: [],
@@ -71,37 +71,45 @@ export default class MyProjectsCards extends React.Component {
 
   updateDimensions() {
     if (window.innerWidth < 400) {
-      this.setState({ deviceWindow: 'narrowWindow' }, function () { console.log("device window set, rerender...") });
+      this.setState({ deviceWindow: 'narrowWindow' }
+      // , function () { console.log("device window set, rerender...") }
+      );
     }
     else {
-      this.setState({ deviceWindow: 'broadWindow' }, function () { console.log("device window set, rerender...") });
+      this.setState({ deviceWindow: 'broadWindow' }
+      // , function () { console.log("device window set, rerender...") }
+      );
     }
   }
   componentWillUnmount() {
-    console.log("unmouting Projects List page.............." + this.props.match.params.modeId);
+    // console.log("unmouting Projects List page.............." + this.props.match.params.modeId);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("comp received PROPS: " + this.props.match.params.modeId + " nextprops:" + nextProps.match.params.modeId)
+    // console.log("comp received PROPS: " + this.props.match.params.modeId + " nextprops:" + nextProps.match.params.modeId)
 
     if (this.props.match.params.modeId !== nextProps.match.params.modeId) {
 
       if (nextProps.match.params.modeId == 'voter') {
-        console.log("VOTED PROJS LIST API CALLED")
+        // console.log("VOTED PROJS LIST API CALLED")
         fetch('/votedProjects')
           .then(res => res.json())
-          .then(votedProjects => this.setState({ votedProjects }, function () { console.log(votedProjects + " render now please..") }));
+          .then(votedProjects => this.setState({ votedProjects }
+          // , function () { console.log(votedProjects + " render now please..") }
+          ));
       } else if (nextProps.match.params.modeId === 'presenter') {
-        console.log("REGISTERED PROJS LIST API CALLED")
+        // console.log("REGISTERED PROJS LIST API CALLED")
         fetch('/registeredProjects')
           .then(res => res.json())
-          .then(registeredProjects => this.setState({ registeredProjects }, function () { console.log(registeredProjects + "render now please..") }));
+          .then(registeredProjects => this.setState({ registeredProjects }
+          // , function () { console.log(registeredProjects + "render now please..") }
+          ));
       }
     }
   }
 
   componentWillUpdate(nextProps) {
-    console.log("component will udpate " + this.props.match.params.modeId + " nextprops:" + nextProps.match.params.modeId);
+    // console.log("component will udpate " + this.props.match.params.modeId + " nextprops:" + nextProps.match.params.modeId);
   }
 
     shouldComponentUpdate(){
@@ -110,17 +118,21 @@ export default class MyProjectsCards extends React.Component {
   componentDidMount() {
     
     // localStorage.setItem("userMode", this.props.match.params.modeId);
-    console.log("THIS !!!!!  project list did mount" + localStorage.userMode);
+    // console.log("THIS !!!!!  project list did mount" + localStorage.userMode);
 if (localStorage.userMode === 'voter') {
-      console.log("VOTED PROJS LIST API CALLED")
+      // console.log("VOTED PROJS LIST API CALLED")
       fetch('/votedProjects')
         .then(res => res.json())
-        .then(votedProjects => this.setState({ votedProjects }, function() {console.log("votedProjects set.. should be able to render the change now")}));
+        .then(votedProjects => this.setState({ votedProjects }
+        // , function() {console.log("votedProjects set.. should be able to render the change now")}
+        ));
     } else if (localStorage.userMode === 'presenter') {
-      console.log("REGISTERD PROJS LIST API CALLED")
+      // console.log("REGISTERD PROJS LIST API CALLED")
       fetch('/registeredProjects')
         .then(res => res.json())
-        .then(registeredProjects => this.setState({ registeredProjects }, function(){console.log("registeredProjects set.. should be able to render the change now")}));
+        .then(registeredProjects => this.setState({ registeredProjects }
+        // , function(){console.log("registeredProjects set.. should be able to render the change now")}
+        ));
     }
 
     this.updateDimensions();
@@ -129,7 +141,7 @@ if (localStorage.userMode === 'voter') {
   }
 
   componentWillMount() {
-    console.log("mounting projects list page................ " + this.props.match.params.modeId)
+    // console.log("mounting projects list page................ " + this.props.match.params.modeId)
     localStorage.setItem("userMode", this.props.match.params.modeId);
     
 
@@ -138,7 +150,7 @@ if (localStorage.userMode === 'voter') {
 
 
   handleRegisteration() {
-    console.log("handled registeration");
+    // console.log("handled registeration");
   }
 
 
@@ -157,10 +169,10 @@ if (localStorage.userMode === 'voter') {
       this.setState({ votepageOpen: true, presenterSelectedProj: proj })
   };
   componentDidUpdate(){
-    console.log("component did update");
+    // console.log("component did update");
   }
   render() {
-    {console.log("RENDERED");}
+    // {console.log("RENDERED");}
     // {
     //   console.log("voted projects");
     //   this.state.votedProjects.map(function (proj) {

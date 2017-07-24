@@ -77,7 +77,9 @@ const Protected = () => <h3>Protected</h3>
     login = () => {
         fetch('/login')
             .then(res => res.json())
-            .then(auth => this.setState({ auth: auth }, function () { console.log(auth + "auth mounted") }));
+            .then(auth => this.setState({ auth: auth }
+            // , function () { console.log(auth + "auth mounted") }
+            ));
 
 
 
@@ -87,7 +89,7 @@ const Protected = () => <h3>Protected</h3>
     }
 
     render() {
-        console.log("loc: "+ this.props.location.state );
+        // console.log("loc: "+ this.props.location.state );
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         const { redirectToReferrer } = this.state
 

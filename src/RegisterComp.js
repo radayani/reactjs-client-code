@@ -63,7 +63,7 @@ const styles = {
 var projs = null;
 export default class RegisterComp extends Component {
     constructor(props) {
-        console.log("cookies.get" + cookies.get('alias'));
+        // console.log("cookies.get" + cookies.get('alias'));
         localStorage.setItem("alias", cookies.get('alias'));
         super(props);
 
@@ -76,7 +76,9 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(venues => this.setState({ venues }, function () { console.log(venues) }));
+            .then(venues => this.setState({ venues }
+            // , function () { console.log(venues) }
+            ));
         this.state = {
             venueListOpen: false,
             venueValue: -1,
@@ -101,21 +103,25 @@ export default class RegisterComp extends Component {
             selectFieldName: "my-select",
             selectPlaceholder: "Choose some options...",
         }
-        console.log(this.state.projects + "projects");
+        // console.log(this.state.projects + "projects");
     }
 
     onChange = function (obj) {
-        console.log("EVENT", obj.event); // "added" or "removed" 
-        console.log("ITEM", obj.item);   // item that has been added/removed { label: '...', value: '...' } 
-        console.log("VALUE", obj.value); // [{label: '...', value: '...'}, {label: '...', value: '...'}] 
+        // console.log("EVENT", obj.event); // "added" or "removed" 
+        // console.log("ITEM", obj.item);   // item that has been added/removed { label: '...', value: '...' } 
+        // console.log("VALUE", obj.value); // [{label: '...', value: '...'}, {label: '...', value: '...'}] 
     }
 
     updateDimensions() {
         if (window.innerWidth < 400) {
-            this.setState({ deviceWindow: 'narrowWindow' }, function () { console.log("device window set, rerender...") });
+            this.setState({ deviceWindow: 'narrowWindow' }
+            // , function () { console.log("device window set, rerender...") }
+            );
         }
         else {
-            this.setState({ deviceWindow: 'broadWindow' }, function () { console.log("device window set, rerender...") });
+            this.setState({ deviceWindow: 'broadWindow' }
+            // , function () { console.log("device window set, rerender...") }
+            );
         }
     }
     componentDidMount() {
@@ -150,7 +156,9 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(projects => this.setState({ projects }, function () { console.log("zzzzzz: "); console.log(projects) }));
+            .then(projects => this.setState({ projects }
+            // , function () { console.log("zzzzzz: "); console.log(projects) }
+            ));
 
         fetch(`/api/getRegisteredProjects?alias=${localStorage.alias}`, {
             headers: {
@@ -161,7 +169,9 @@ export default class RegisterComp extends Component {
 
         })
             .then(res => res.json())
-            .then(registeredProjects => this.setState({ registeredProjects }, function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }))
+            .then(registeredProjects => this.setState({ registeredProjects }
+            // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
+            ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
             });
@@ -170,7 +180,7 @@ export default class RegisterComp extends Component {
     }
 
     componentWillUpdate() {
-        console.log("will update");
+        // console.log("will update");
 
 
     }
@@ -184,7 +194,9 @@ export default class RegisterComp extends Component {
 
         })
             .then(res => res.json())
-            .then(registeredProjects => this.setState({ registeredProjects }, function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }))
+            .then(registeredProjects => this.setState({ registeredProjects }
+            // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
+            ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
             });
@@ -209,7 +221,9 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(projects => this.setState({ projects }, function () { console.log(projects + "votedProjects set.. should be able to render the change now") }))
+            .then(projects => this.setState({ projects }
+            // , function () { console.log(projects + "votedProjects set.. should be able to render the change now") }
+            ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
             });
@@ -220,12 +234,12 @@ export default class RegisterComp extends Component {
     };
 
     handleProjectSelection(event, index, value) {
-        console.log(event + " " + index + " " + value);
+        // console.log(event + " " + index + " " + value);
         this.setState({ projectValue: value, projectSelected: true });
     }
 
     handleVenueSelection(event, index, value) {
-        console.log(event + " " + index + " " + value + "location....");
+        // console.log(event + " " + index + " " + value + "location....");
         this.setState({ venueValue: value });
 
         fetch(`/api/getAvailableLocation?venue=${value}`, {
@@ -237,14 +251,16 @@ export default class RegisterComp extends Component {
             }
         })
             .then(res => res.json())
-            .then(locations => this.setState({ locations }, function () { console.log(locations) }))
+            .then(locations => this.setState({ locations }
+            // , function () { console.log(locations) }
+            ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err)
             });
 
     }
     handleLocationSelection(event, index, value) {
-        console.log(event + " " + index + " " + value);
+        // console.log(event + " " + index + " " + value);
         this.setState({ locationValue: value, venueId: value });
 
     }
@@ -270,17 +286,17 @@ export default class RegisterComp extends Component {
                 .then(function (response) {
 
                     if (response.status !== 200) {
-                        console.log('Looks like there was a problem. Status Code: ' +
-                            response.status);
+                        // console.log('Looks like there was a problem. Status Code: ' +
+                            // response.status);
                         return;
                     }
 
                     // Examine the text in the response  
                     response.json()
                         .then(function (data) {
-                            console.log(data);
+                            // console.log(data);
                             projs = data;
-                            console.log(projs);
+                            // console.log(projs);
                         });
                 }).then(this.setState({ registered: true, snackbarOpen: true }))
                 // .then(this.forceUpdate())
@@ -295,9 +311,9 @@ export default class RegisterComp extends Component {
 
     }
     render() {
-        console.log("render" + this.state.projects);
+        // console.log("render" + this.state.projects);
         return (
-            <div >
+          <div >
                 {localStorage.length > 0 &&
                     <div className="App-header">
                         <AppBarComp />
@@ -314,7 +330,7 @@ export default class RegisterComp extends Component {
                     >
                         <MenuItem value={-1} primaryText="Select Project to Register" />
                         {this.state.projects.map(function (elem, i) {
-                            { console.log("PROJECTS" + this.state.projects.length) }
+                            // { console.log("PROJECTS" + this.state.projects.length) }
                             return (
                                 <MenuItem value={elem.id} primaryText={elem.name} key={i} />
                             );
@@ -366,7 +382,8 @@ export default class RegisterComp extends Component {
 
                 </Paper><br />
 
-                {console.log("REGISTERED PRJECTS : " + this.state.registeredProjects)}
+                {//console.log("REGISTERED PRJECTS : " + this.state.registeredProjects)
+            }
                 <br />
                 <Paper style={styles.registeredProjsMargin}>
                     <h5 style={{ marginTop: 10, textAlign: 'left' }}>My Registered Projects</h5>
