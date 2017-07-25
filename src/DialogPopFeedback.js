@@ -115,7 +115,7 @@ export default class DialogPopFeedback extends React.Component {
                         <Snackbar
                             style={{ width: 210 }}
                             open={this.state.snackbarOpen}
-                            message="Saved Successfully!"
+                            message="Saved Feedback Successfully!"
                             autoHideDuration={1000}
                             onRequestClose={this.handleRequestClose.bind(this)} />}
                 </Dialog>

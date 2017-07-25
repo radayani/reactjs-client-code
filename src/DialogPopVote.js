@@ -177,6 +177,24 @@ export default class DialogPopVote extends React.Component {
 
     handlePinUpdate(event, newValue) {
         this.setState({ voterPin: newValue, pinAdded: true });
+
+        fetch(`/api/validatePin?alias=${this.state.voterAlias}&pin=${this.state.voterPin}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+
+        }
+      })
+        .then(console.log("pin validate " + res));
+        // .then(pinValidated => this.setState({ registeredProjects }
+        //   // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
+        // ))
+        // .catch(function (err) {
+        //   console.log('Fetch Error :-S', err);
+        // });
+
+
+
         // if (newValue && this.state.aliasAdded)
         //     this.setState({ pinAdded: true, incompleteDetails: false });
         // else
@@ -185,6 +203,8 @@ export default class DialogPopVote extends React.Component {
     }
     handleAliasUpdate(event, newValue) {
         this.setState({ voterAlias: newValue, });
+        
+        
         // if (newValue)
         //     this.setState({ aliasAdded: true });
         // if (this.state.pinAdded)
