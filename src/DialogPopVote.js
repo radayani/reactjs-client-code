@@ -59,7 +59,7 @@ export default class DialogPopVote extends React.Component {
         //     this.setState({ snackbarOpen: true, incompleteDetails: true, });
         // }
         // else {
-            fetch(`/api/castVote?id=${this.props.presenterSelectedProjId}&alias=${this.state.voterAlias}`, {
+            fetch(`/api/castVote?id=${this.props.presenterSelectedProjId}&alias=${this.state.voterAlias.toLowerCase()}`, {
 
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export default class DialogPopVote extends React.Component {
             this.setState({ snackbarOpen: true, incompleteDetails: true, });
         }
         else {
-            fetch(`/api/castVote?id=${this.props.match.params.projId}&alias=${this.state.voterAlias}`, {
+            fetch(`/api/castVote?id=${this.props.match.params.projId}&alias=${this.state.voterAlias.toLowerCase()}`, {
 
                 headers: {
                     'Content-Type': 'application/json',

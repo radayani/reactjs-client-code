@@ -163,13 +163,13 @@ export default class GenerateMyPinComponent extends React.Component {
 
                     {(!localStorage.myPIN || localStorage.myPIN == undefined)
                         &&
-                        <RaisedButton label="Generate My PIN" primary={true} style={style.button} onTouchTap={this.handleButtonClick.bind(this)} />
+                        <RaisedButton label="Generate My Voter Code" primary={true} style={style.button} onTouchTap={this.handleButtonClick.bind(this)} />
                     }
 
                     {localStorage.myPIN != undefined &&
                         <div>
                             <RaisedButton
-                                label="Generate My PIN"
+                                label="Generate My Voter Code"
                                 disabled={true}
                                 primary={true}
                                 style={style.button}
@@ -177,7 +177,7 @@ export default class GenerateMyPinComponent extends React.Component {
 
                             <Snackbar
                                 open={this.state.open}
-                                message="Successfully generated your unique PIN!"
+                                message="Successfully generated your unique Voter Code!"
                                 autoHideDuration={1000}
                                 onRequestClose={this.handleRequestClose}
                                 style={{ background: lightBlack }} />

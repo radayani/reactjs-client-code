@@ -132,7 +132,7 @@ export default class MyVotedProjectsCards extends React.Component {
                   {elem.description}
                 </CardText>
                 <CardActions>
-                  <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel="noopener noreferrer"  >
+                  <a target="_blank" href={`https://garagehackbox.azurewebsites.net/hackathons/1074/projects/${elem.id}`} rel="noopener noreferrer"  >
                     <FlatButton label="Continue Reading..." style={styles.voterButton} />
                   </a>
                   {this.state.deviceWindow === 'narrowWindow' &&
