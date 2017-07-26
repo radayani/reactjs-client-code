@@ -3,8 +3,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { NavLink } from "react-router-dom"
 import Paper from 'material-ui/Paper';
 import AppBarComp from './AppBarComp';
-import Cookies from 'universal-cookie';
-const cookies = new Cookies();
 
 const style = {
   button: {

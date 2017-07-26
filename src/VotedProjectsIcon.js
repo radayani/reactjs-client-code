@@ -12,7 +12,7 @@ import IconButton from 'material-ui/IconButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import { lightBlack, cyan700, pinkA200, fullWhite, fullBlack } from 'material-ui/styles/colors';
+import { lightBlack, cyan700, pinkA200, fullWhite, } from 'material-ui/styles/colors';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Notifications, { notify } from 'react-notify-toast';
 const menuItems = [
@@ -149,9 +149,9 @@ export default class VotedProjectsIcon extends React.Component {
                       <ListItem
                         primaryText="My Projects" />
                     </NavLink>
-                     <NavLink exact to={`/home/${localStorage.myPIN}/register`} onTouchTap={this.handleToggle.bind(this, menuItems[3])} style={{ textDecoration: 'none' }} >
-                    <ListItem primaryText="Register for Science Fair" />
-                  </NavLink>
+                    <NavLink exact to={`/home/${localStorage.myPIN}/register`} onTouchTap={this.handleToggle.bind(this, menuItems[3])} style={{ textDecoration: 'none' }} >
+                      <ListItem primaryText="Register for Science Fair" />
+                    </NavLink>
                   </div>
                 }
                 <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel='noreferrer noopener' style={{ textDecoration: 'none' }}>
@@ -164,7 +164,7 @@ export default class VotedProjectsIcon extends React.Component {
                 <Subheader style={{ color: lightBlack }}>Disabled Features</Subheader>
 
                 <ListItem
-                  style={{color:lightBlack}}
+                  style={{ color: lightBlack }}
                   primaryText="Recommendations"
                   secondaryText="Projects as per your interests "
                 />
@@ -174,9 +174,8 @@ export default class VotedProjectsIcon extends React.Component {
         </div>
       );
     }
-    else
-    {
-      return(<div></div>)
+    else {
+      return (<div></div>)
     }
   }
 }

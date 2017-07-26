@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { cyan100, redA700, green700, grey100 } from 'material-ui/styles/colors';
-import GenerateMyPinComponent from './GenerateMyPinComponent';
+import { redA700, green700, } from 'material-ui/styles/colors';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import AppBarComp from './AppBarComp';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import {
     Table,
     TableBody,
@@ -77,7 +74,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(venues => this.setState({ venues }
-            // , function () { console.log(venues) }
+                // , function () { console.log(venues) }
             ));
         this.state = {
             venueListOpen: false,
@@ -115,12 +112,12 @@ export default class RegisterComp extends Component {
     updateDimensions() {
         if (window.innerWidth < 400) {
             this.setState({ deviceWindow: 'narrowWindow' }
-            // , function () { console.log("device window set, rerender...") }
+                // , function () { console.log("device window set, rerender...") }
             );
         }
         else {
             this.setState({ deviceWindow: 'broadWindow' }
-            // , function () { console.log("device window set, rerender...") }
+                // , function () { console.log("device window set, rerender...") }
             );
         }
     }
@@ -157,7 +154,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(projects => this.setState({ projects }
-            // , function () { console.log("zzzzzz: "); console.log(projects) }
+                // , function () { console.log("zzzzzz: "); console.log(projects) }
             ));
 
         fetch(`/api/getRegisteredProjects?alias=${localStorage.alias}`, {
@@ -170,7 +167,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(registeredProjects => this.setState({ registeredProjects }
-            // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
+                // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
             ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
@@ -195,7 +192,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(registeredProjects => this.setState({ registeredProjects }
-            // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
+                // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
             ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
@@ -222,7 +219,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(projects => this.setState({ projects }
-            // , function () { console.log(projects + "votedProjects set.. should be able to render the change now") }
+                // , function () { console.log(projects + "votedProjects set.. should be able to render the change now") }
             ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
@@ -252,7 +249,7 @@ export default class RegisterComp extends Component {
         })
             .then(res => res.json())
             .then(locations => this.setState({ locations }
-            // , function () { console.log(locations) }
+                // , function () { console.log(locations) }
             ))
             .catch(function (err) {
                 console.log('Fetch Error :-S', err)
@@ -287,7 +284,7 @@ export default class RegisterComp extends Component {
 
                     if (response.status !== 200) {
                         // console.log('Looks like there was a problem. Status Code: ' +
-                            // response.status);
+                        // response.status);
                         return;
                     }
 
@@ -313,7 +310,7 @@ export default class RegisterComp extends Component {
     render() {
         // console.log("render" + this.state.projects);
         return (
-          <div >
+            <div >
                 {localStorage.length > 0 &&
                     <div className="App-header">
                         <AppBarComp />
@@ -383,7 +380,7 @@ export default class RegisterComp extends Component {
                 </Paper><br />
 
                 {//console.log("REGISTERED PRJECTS : " + this.state.registeredProjects)
-            }
+                }
                 <br />
                 <Paper style={styles.registeredProjsMargin}>
                     <h5 style={{ marginTop: 10, textAlign: 'left' }}>My Registered Projects</h5>

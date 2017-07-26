@@ -8,9 +8,7 @@ import { cyan50, redA700 } from 'material-ui/styles/colors';
 import { darkBlack } from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
 import AppBarComp from './AppBarComp';
-import Cookies from 'universal-cookie';
 
-const cookies = new Cookies();
 
 const style = {
   margin: 15,
@@ -294,7 +292,7 @@ export default class SearchFilterComponent extends React.Component {
             // dataSource={this.state.matchedPojects}
             dataSource={this.state.projects}
             dataSourceConfig={dataSourceConfig}
-            maxSearchResults={20}
+            maxSearchResults={12}
             style={{ margin: 2 }}
             textFieldStyle={{ margin: 2 }}
           />
@@ -304,10 +302,11 @@ export default class SearchFilterComponent extends React.Component {
             {(this.state.chosenProjectId != null) ?
               <FlatButton label="Details..." style={style.button} onTouchTap={this.handleOpen.bind(this)} /> : <FlatButton label="Details..." style={style.button.disabled} disabled={true} />
             }
-            {localStorage.userMode == 'voter'
-              &&
-              <RaisedButton label="Vote" primary={true} style={style} onTouchTap={this.handleVoteButton.bind(this)} />
+            {// localStorage.userMode == 'voter'
+              //&&
             }
+              <RaisedButton label="Vote" primary={true} style={style} onTouchTap={this.handleVoteButton.bind(this)} />
+            
           </div>
 
           <Dialog

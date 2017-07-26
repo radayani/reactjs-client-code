@@ -1,17 +1,14 @@
 import React from 'react';
 import AppBarComp from './AppBarComp';
-
+import Paper from 'material-ui/Paper';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { cyan100, pinkA200, lightBlack } from 'material-ui/styles/colors';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import { cyan100, grey500 } from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import DialogPopFeedback from './DialogPopFeedback';
-import DialogPopVote from './DialogPopVote';
-import { NavLink } from "react-router-dom"
-import FooterContent from './FooterContent';
+import { NavLink } from "react-router-dom";
+import CircularProgress from 'material-ui/CircularProgress';
+
 const styles = {
   voterButton: {
     backgroundColor: cyan100,
@@ -36,12 +33,12 @@ export default class MyVotedProjectsCards extends React.Component {
   updateDimensions() {
     if (window.innerWidth < 400) {
       this.setState({ deviceWindow: 'narrowWindow' }
-      // , function () { console.log("device window set, rerender...") }
+        // , function () { console.log("device window set, rerender...") }
       );
     }
     else {
       this.setState({ deviceWindow: 'broadWindow' }
-      // , function () { console.log("device window set, rerender...") }
+        // , function () { console.log("device window set, rerender...") }
       );
     }
   }
@@ -56,7 +53,7 @@ export default class MyVotedProjectsCards extends React.Component {
       fetch(`/api/votedProjects?alias=${localStorage.alias}`)
         .then(res => res.json())
         .then(votedProjects => this.setState({ votedProjects }
-        // , function () { console.log(votedProjects + " render now please..") }
+          // , function () { console.log(votedProjects + " render now please..") }
         ));
     }
   }
@@ -85,7 +82,7 @@ export default class MyVotedProjectsCards extends React.Component {
 
         .then(res => res.json())
         .then(votedProjects => this.setState({ votedProjects }
-        // , function () { console.log(votedProjects + "votedProjects set.. should be able to render the change now") }
+          // , function () { console.log(votedProjects + "votedProjects set.. should be able to render the change now") }
         ));
     }
     this.updateDimensions();
@@ -113,47 +110,48 @@ export default class MyVotedProjectsCards extends React.Component {
 
   render() {
     return (
-       <div className="default">
+      <div className="default">
         {localStorage.length > 0 &&
           <div className="App-header">
             <AppBarComp />
           </div>
         }
-          {
-            this.state.votedProjects.map(function (elem, i) {
-              return (
-                <Card key={i}>
-                  <CardHeader
 
-                    title={elem.title}
-                    subtitle={elem.tagline}
-                    actAsExpander={true}
-                    showExpandableButton={true}
-                  />
-                  <CardText expandable={true}>
-                    {elem.description}
-                  </CardText>
-                  <CardActions>
-                    <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel="noopener noreferrer"  >
-                      <FlatButton label="Continue Reading..." style={styles.voterButton} />
-                    </a>
-                    {this.state.deviceWindow === 'narrowWindow' &&
-                      <NavLink to={`/api/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.id}/feedback?${this.state.deviceWindow}`} >
-                        <RaisedButton label="Feedback" />
-                      </NavLink>
-                    }
-                    {this.state.deviceWindow === 'broadWindow' &&
-                      <RaisedButton label="Feedback" onTouchTap={this.handleOpen.bind(this, elem.title)} />
-                    }
-                  </CardActions>
-                </Card>
-              );
-            }, this)}
+        {this.state.votedProjects.length == 0 ? <Paper zDepth={2} style={{ textAlign: 'center', padding: 20, display: 'inline-block', alignContent: 'center', alignSelf: 'center' }}>Either no voted projects in your name, <br /> Or page hasn't loaded yet. <br/>Please refresh or contact us if problem persists.<br/><br/>  <br/> <CircularProgress size={20} thickness={4} style={{ color: grey500 }}/></Paper> :
+          this.state.votedProjects.map(function (elem, i) {
+            return (
+              <Card key={i}>
+                <CardHeader
 
-          {this.state.feedbackOpen
-            &&
-            <DialogPopFeedback voterSelectedProj={this.state.voterSelectedProj} feedbackOpen={this.state.feedbackOpen} onCloseCallback={this.handleClose.bind(this)} isItPhoneWindow={this.state.phoneWindow} />}
-        </div>
+                  title={elem.title}
+                  subtitle={elem.tagline}
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                <CardText expandable={true}>
+                  {elem.description}
+                </CardText>
+                <CardActions>
+                  <a target="_blank" href="https://garagehackbox.azurewebsites.net/hackathons/oneweek/projects/tile" rel="noopener noreferrer"  >
+                    <FlatButton label="Continue Reading..." style={styles.voterButton} />
+                  </a>
+                  {this.state.deviceWindow === 'narrowWindow' &&
+                    <NavLink to={`/api/${localStorage.alias}/${localStorage.myPIN}/userMode/voter/myProjects/${elem.id}/feedback?${this.state.deviceWindow}`} >
+                      <RaisedButton label="Feedback" />
+                    </NavLink>
+                  }
+                  {this.state.deviceWindow === 'broadWindow' &&
+                    <RaisedButton label="Feedback" onTouchTap={this.handleOpen.bind(this, elem.title)} />
+                  }
+                </CardActions>
+              </Card>
+            );
+          }, this)}
+
+        {this.state.feedbackOpen
+          &&
+          <DialogPopFeedback voterSelectedProj={this.state.voterSelectedProj} feedbackOpen={this.state.feedbackOpen} onCloseCallback={this.handleClose.bind(this)} isItPhoneWindow={this.state.phoneWindow} />}
+      </div>
     );
   }
 }

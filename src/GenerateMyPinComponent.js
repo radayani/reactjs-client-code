@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import { lightBlack, cyan50, fullWhite } from 'material-ui/styles/colors';
-import { NavLink } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import AppBarComp from './AppBarComp';
 import FaArrowRight from 'react-icons/lib/fa/arrow-right';
 // import CopyToClipboard from 'react-copy-to-clipboard';
@@ -74,8 +74,12 @@ export default class GenerateMyPinComponent extends React.Component {
     }
 
     componentWillMount() {
-        // console.log(" pin: " + this.state.myPIN);
-
+        if (cookies.get('myPIN')) {
+            console.log("this");
+            localStorage.setItem('userMode', 'voter');
+            this.props.history.push(`/home/${cookies.get('myPIN')}/userMode/voter/vote`)
+            console.log("that");
+        }
     }
     componentDidMount() {
         // localStorage.setItem("alias", this.props.match.params.alias);
@@ -121,7 +125,7 @@ export default class GenerateMyPinComponent extends React.Component {
 
                     if (response.status !== 200) {
                         // console.log('Looks like there was a problem. Status Code: ' +
-                            // response.status);
+                        // response.status);
                         return;
                     }
 
@@ -195,7 +199,7 @@ export default class GenerateMyPinComponent extends React.Component {
                     <NavLink to={`/home/${localStorage.myPIN}/userMode`}>
                         {// <NavLink to={`home/${this.props.match.url}/${localStorage.myPIN}/userMode`}>
                         }
-                        <RaisedButton label="Continue" labelPosition='before' primary={true}><FaArrowRight style={{color:fullWhite}}/></RaisedButton>
+                        <RaisedButton label="Continue" labelPosition='before' primary={true}><FaArrowRight style={{ color: fullWhite }} /></RaisedButton>
                     </NavLink>}
             </div>
         );

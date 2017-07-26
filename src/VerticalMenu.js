@@ -36,9 +36,7 @@ export default class VerticalMenu extends React.Component {
 
     }
     handleButtonClick() {
-        window.location.replace('http://sfvotes.azurewebsites.net/api/logout')
-
-        // window.location.replace('http://localhost:3002/api/logout')
+        window.location.replace('http://sfvote.azurewebsites.net/api/logout')
     }
     handleOnRequestChange = (value) => {
         this.setState({

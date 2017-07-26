@@ -4,19 +4,15 @@ import Dialog from 'material-ui/Dialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import SearchFilterComponent from './SearchFilterComponent';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import AppBarComp from './AppBarComp';
-import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import FooterContent from './FooterContent';
+import FaCheck from 'react-icons/lib/fa/check';
+import { pinkA200, pink50, redA700, fullWhite, green500, grey500 } from 'material-ui/styles/colors';
+import CircularProgress from 'material-ui/CircularProgress';
 
-import { pinkA200, pink50, redA700, fullWhite } from 'material-ui/styles/colors';
-
-const projects = [
-
-];
 
 const styles = {
     block: {
@@ -47,6 +43,7 @@ export default class DialogPopVote extends React.Component {
             voterAlias: null,
             voterPin: null,
             incompleteDetails: false,
+            pinValidated: false
         };
     }
 
@@ -58,10 +55,10 @@ export default class DialogPopVote extends React.Component {
     handleBroadWinVoteButton() {
         // console.log(this.state.incompleteDetails + " incomp details ???? broad");
 
-        if (!this.state.voterPin || !this.state.voterAlias) {
-            this.setState({ snackbarOpen: true, incompleteDetails: true, });
-        }
-        else {
+        // if (!this.state.voterPin || !this.state.voterAlias) {
+        //     this.setState({ snackbarOpen: true, incompleteDetails: true, });
+        // }
+        // else {
             fetch(`/api/castVote?id=${this.props.presenterSelectedProjId}&alias=${this.state.voterAlias}`, {
 
                 headers: {
@@ -88,12 +85,12 @@ export default class DialogPopVote extends React.Component {
                     // });
                 }
                 )
-                .then(this.setState({ successfullySavedVote: true, voteSaved: true, snackbarOpen: true, incompleteDetails: false, voterAlias: null, voterPin: null, pinAdded: false, aliasAdded: false }))
+                .then(this.setState({ successfullySavedVote: true, voteSaved: true, snackbarOpen: true, incompleteDetails: false, voterAlias: null, voterPin: null, pinAdded: false, aliasAdded: false, pinValidated: false }))
                 .catch(function (err) {
                     console.log('Fetch Error :-S', err);
                 });
 
-        }
+        // }
 
 
         // this.setState({ voteSaved: true, snackbarOpen: true, incompleteDetails: true, });
@@ -176,39 +173,25 @@ export default class DialogPopVote extends React.Component {
     }
 
     handlePinUpdate(event, newValue) {
+        // console.log("pin validated");
+        // console.log(this.state.pinValidated);
         this.setState({ voterPin: newValue, pinAdded: true });
+        if (newValue.length > 6) {
+            fetch(`/api/validatePin?alias=${this.state.voterAlias}&pin=${newValue}`)
+                .then(res => res.json())
+                .then(pinValidated => this.setState({ pinValidated }, function () { console.log(pinValidated) }))
 
-        fetch(`/api/validatePin?alias=${this.state.voterAlias}&pin=${this.state.voterPin}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+                .catch(function (err) {
+                    console.log('Fetch Error :-S', err);
+                });
+
 
         }
-      })
-        .then(console.log("pin validate " + res));
-        // .then(pinValidated => this.setState({ registeredProjects }
-        //   // , function () { console.log(" REGISTERED CALLED: "); console.log(registeredProjects) }
-        // ))
-        // .catch(function (err) {
-        //   console.log('Fetch Error :-S', err);
-        // });
+        else console.log("still invalid");
 
-
-
-        // if (newValue && this.state.aliasAdded)
-        //     this.setState({ pinAdded: true, incompleteDetails: false });
-        // else
-        //     this.setState({ pinAdded: false });
-        //             this.setState({  });
     }
     handleAliasUpdate(event, newValue) {
         this.setState({ voterAlias: newValue, });
-        
-        
-        // if (newValue)
-        //     this.setState({ aliasAdded: true });
-        // if (this.state.pinAdded)
-        //     this.setState({ incompleteDetails: false });
     }
 
     render() {
@@ -222,6 +205,7 @@ export default class DialogPopVote extends React.Component {
                     />
                     <FlatButton
                         label="Vote"
+                        disabled={!this.state.pinValidated}
                         secondary={true}
                         keyboardFocused={true}
                         onTouchTap={this.handleBroadWinVoteButton.bind(this)}
@@ -254,15 +238,18 @@ export default class DialogPopVote extends React.Component {
                                     style={{ margin: 2 }}
                                     onChange={this.handleAliasUpdate.bind(this)} />
 
-                                <TextField
-                                    floatingLabelFocusStyle={{ color: pinkA200 }}
-                                    underlineFocusStyle={{ borderColor: pinkA200 }}
-                                    disabled={false}
-                                    id="pin-field"
-                                    floatingLabelText="Your PIN"
-                                    style={{ margin: 2 }}
-                                    onChange={this.handlePinUpdate.bind(this)} />
-
+                                <div className='sameline'>
+                                    <TextField
+                                        floatingLabelFocusStyle={{ color: pinkA200 }}
+                                        underlineFocusStyle={{ borderColor: pinkA200 }}
+                                        disabled={false}
+                                        id="pin-field"
+                                        floatingLabelText="Your Voter Code"
+                                        style={{ margin: 2 }}
+                                        onChange={this.handlePinUpdate.bind(this)} />
+                                    {this.state.pinValidated ? <FaCheck style={{ color: green500 }} /> : null}
+                                    {!this.state.pinValidated && this.state.pinAdded ? <CircularProgress size={20} thickness={4} style={{ color: grey500 }}/> : null}
+                                </div>
 
                                 <TextField
                                     floatingLabelFocusStyle={{ color: pinkA200 }}
@@ -322,16 +309,19 @@ export default class DialogPopVote extends React.Component {
                                     floatingLabelText="Alias"
                                     onChange={this.handleAliasUpdate.bind(this)}
                                     style={{ margin: 2 }} />
+                                <div className='sameline'>
 
-                                <TextField
-                                    floatingLabelFocusStyle={{ color: pinkA200 }}
-                                    underlineFocusStyle={{ borderColor: pinkA200 }}
-                                    disabled={false}
-                                    id="pin-field"
-                                    floatingLabelText="Your PIN"
-                                    onChange={this.handlePinUpdate.bind(this)}
-                                    style={{ margin: 2 }} />
-
+                                    <TextField
+                                        floatingLabelFocusStyle={{ color: pinkA200 }}
+                                        underlineFocusStyle={{ borderColor: pinkA200 }}
+                                        disabled={false}
+                                        id="pin-field"
+                                        floatingLabelText="Your Voter Code"
+                                        onChange={this.handlePinUpdate.bind(this)}
+                                        style={{ margin: 2 }} />
+                                   {this.state.pinValidated ? <FaCheck style={{ color: green500 }} />: null}
+                                   {!this.state.pinValidated && this.state.pinAdded ?<CircularProgress size={20} thickness={4} style={{ color: grey500 }}/>: null}
+                                </div>
                                 <TextField
                                     floatingLabelFocusStyle={{ color: pinkA200 }}
                                     underlineFocusStyle={{ borderColor: pinkA200 }}
@@ -349,6 +339,8 @@ export default class DialogPopVote extends React.Component {
 
                                     <FlatButton
                                         label="Vote"
+                                        disabled={!this.state.pinValidated}
+
                                         secondary={true}
                                         keyboardFocused={true}
                                         onTouchTap={this.handleNarrowWinVoteButton.bind(this)} />

@@ -2,16 +2,15 @@ import React from 'react';
 import AppBarComp from './AppBarComp';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { cyan100, pinkA200, pink50, lightBlack } from 'material-ui/styles/colors';
+import { pinkA200, pink50, lightBlack,grey500 } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import RaisedButton from 'material-ui/RaisedButton';
-import DialogPopFeedback from './DialogPopFeedback';
 import DialogPopVote from './DialogPopVote';
 import { NavLink } from "react-router-dom";
 import FooterContent from './FooterContent';
-
+import Paper from 'material-ui/Paper';
+import CircularProgress from 'material-ui/CircularProgress';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
@@ -172,7 +171,9 @@ export default class MyRegisteredProjectsCards extends React.Component {
         }
         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
           <div className="default voterButton presenterButton">
-            {this.state.registeredProjects.map(function (elem, i) {
+           {this.state.registeredProjects.length == 0 ? <Paper zDepth={2} style={{textAlign:'center', padding:20,display: 'inline-block', alignContent:'center', alignSelf:'center'}}>Either no projects registered which you are part of,<br/> Or page hasn't loaded. <br/> Please refresh or contact us if the problem persists. <br/><br/> <CircularProgress size={20} thickness={4} style={{ color: grey500 }}/></Paper> :
+       
+       this.state.registeredProjects.map(function (elem, i) {
               // { console.log(elem) }
               return (
 

@@ -30,5 +30,5 @@
     "node": ">= 8.0.0",
     "npm": ">= 5.0.0"
   } ,
-  "proxy": "http://sfvotes.azurewebistes.net/" 
+  "proxy": "http://sfvote.azurewebistes.net/" 
 }

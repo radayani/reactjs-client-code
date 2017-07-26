@@ -1,12 +1,7 @@
-
-import React, { Component } from 'react';
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export default class LoginPage extends React.Component {
-
-    constructor(props){
-        super(props);
-    }
 
     handleButtonClick(){
         fetch('/login') 
