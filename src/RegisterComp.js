@@ -69,7 +69,7 @@ export default class RegisterComp extends Component {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-
+                
             }
         })
             .then(res => res.json())
@@ -317,8 +317,7 @@ export default class RegisterComp extends Component {
                     </div>
                 }
                 <Paper zDepth={1} style={styles.margins}>
-                    <h3 style={{ marginTop: 10, textAlign: 'center' }}><b>Resgistration</b></h3>
-
+                    <h3 style={{ marginTop: 10, textAlign: 'center' }}><b>Registration</b></h3>
                     <DropDownMenu
                         style={styles.customWidth}
                         value={this.state.projectValue}

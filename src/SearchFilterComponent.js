@@ -150,12 +150,12 @@ export default class SearchFilterComponent extends React.Component {
     if (this.state.searchedText === this.state.chosenProject) {
 
 
-      fetch(`/api/castVote?id=${this.state.chosenProjectId}&alias=${localStorage.alias}`, {
+      fetch(`/api/castVote?id=${this.state.chosenProjectId}&alias=${localStorage.alias}&pin=${localStorage.myPIN}`, {
 
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-
+          
         }
       })
         .then(function (response) {

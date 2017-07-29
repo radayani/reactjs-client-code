@@ -117,7 +117,7 @@ export default class MyVotedProjectsCards extends React.Component {
           </div>
         }
 
-        {this.state.votedProjects.length == 0 ? <Paper zDepth={2} style={{ textAlign: 'center', padding: 20, display: 'inline-block', alignContent: 'center', alignSelf: 'center' }}>Either no voted projects in your name, <br /> Or page hasn't loaded yet. <br/>Please refresh or contact us if problem persists.<br/><br/>  <br/> <CircularProgress size={20} thickness={4} style={{ color: grey500 }}/></Paper> :
+        {this.state.votedProjects.length == 0 ? <Paper zDepth={2} style={{ textAlign: 'center', padding: 20, display: 'inline-block', alignContent: 'center', alignSelf: 'center' }}>Either no voted projects in your name, <br /> Or page hasn't loaded yet. <br />Please refresh or contact us if problem persists.<br /><br />  <br /> <CircularProgress size={20} thickness={4} style={{ color: grey500 }} /></Paper> :
           this.state.votedProjects.map(function (elem, i) {
             return (
               <Card key={i}>
