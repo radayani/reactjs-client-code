@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FooterContent.js" company="Microsoft">
 //     Microsoft Copyright.
@@ -9,6 +10,8 @@
 //    Raveena Dayani (radayani)  
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 40367f3dba24eba528a0b47c8cfc4602b4574ca9
 import React from 'react';
 import { blueGrey800, fullBlack } from 'material-ui/styles/colors';
 const style = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '..', height: '..', paddingRight:5 }

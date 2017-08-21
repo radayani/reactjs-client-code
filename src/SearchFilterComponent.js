@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SearchFilterComponent.js" company="Microsoft">
 //     Microsoft Copyright.
@@ -9,6 +10,8 @@
 //    Raveena Dayani (radayani)  
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 40367f3dba24eba528a0b47c8cfc4602b4574ca9
 import React from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import Snackbar from 'material-ui/Snackbar';

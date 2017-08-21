@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="VerticalMenu.js" company="Microsoft">
 //     Microsoft Copyright.
@@ -9,6 +10,8 @@
 //    Raveena Dayani (radayani)  
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 40367f3dba24eba528a0b47c8cfc4602b4574ca9
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';

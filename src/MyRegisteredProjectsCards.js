@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MyRegisteredProjectsCards.js" company="Microsoft">
 //     Microsoft Copyright.
@@ -9,6 +10,8 @@
 //    Raveena Dayani (radayani)  
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 40367f3dba24eba528a0b47c8cfc4602b4574ca9
 import React from 'react';
 import AppBarComp from './AppBarComp';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
