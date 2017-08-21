@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AppBarComp.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The app bar component on the top in place of the header which holds the menu icons
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import BadgeOnVoteIcon from './BadgeOnVoteIcon';

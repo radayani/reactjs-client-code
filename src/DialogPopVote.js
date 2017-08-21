@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DialogPopVote.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The dialog/page component (as per the device size - laptop/phone screen size) to take votes during presenter's mode
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';

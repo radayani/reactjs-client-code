@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RegisterComp.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The component page which lets the project presenter Register themselves for a booth for demonstrations in Hackathon Science Fair  
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React, { Component } from 'react';
 import { redA700, green700, } from 'material-ui/styles/colors';
 import DropDownMenu from 'material-ui/DropDownMenu';

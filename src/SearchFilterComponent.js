@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SearchFilterComponent.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The search page component which lets you search for the project to vote for 
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import Snackbar from 'material-ui/Snackbar';

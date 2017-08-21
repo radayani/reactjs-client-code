@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FooterContent.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The footer component on every page
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import { blueGrey800, fullBlack } from 'material-ui/styles/colors';
 const style = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '..', height: '..', paddingRight:5 }

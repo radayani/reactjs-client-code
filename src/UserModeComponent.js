@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserModeComponent.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The component page which lets you choose the mode in which to view the app - Voter or Presenter
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { NavLink } from "react-router-dom"

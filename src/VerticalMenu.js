@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="VerticalMenu.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The component on the top right with 3 vertical dots which lets you change of User Mode or Logout of the app 
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';

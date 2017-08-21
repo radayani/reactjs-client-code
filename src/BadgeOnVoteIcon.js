@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BadgeOnVoteIcon.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The badge component on top left should show the count of the projects the user has voted for but hasn't provided a feedback to. The drawer on the left which gets opened on hamburger menu icon click shows the useful menu options as per the currently selected user mode. 
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import Badge from 'material-ui/Badge';
 import VotedProjectsIcon from './VotedProjectsIcon';

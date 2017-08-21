@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MyRegisteredProjectsCards.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The page component which shows the list of all the projects the user (presenter) is a team member of
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React from 'react';
 import AppBarComp from './AppBarComp';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';

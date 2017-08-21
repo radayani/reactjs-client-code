@@ -1,3 +1,14 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="App.js" company="Microsoft">
+//     Microsoft Copyright.
+// </copyright>
+// <summary>
+//   The main start file on client-side 
+// </summary>
+// <author>
+//    Raveena Dayani (radayani)  
+// </author>
+// --------------------------------------------------------------------------------------------------------------------
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter } from "react-router-dom"
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
